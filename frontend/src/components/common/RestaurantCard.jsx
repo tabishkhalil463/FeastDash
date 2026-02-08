@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { FiClock, FiTruck } from 'react-icons/fi';
 import StarRating from './StarRating';
 import { formatPrice } from '../../utils/currency';
+import { mediaUrl } from '../../services/api';
 
 export default function RestaurantCard({ restaurant }) {
   const r = restaurant;
@@ -12,7 +13,7 @@ export default function RestaurantCard({ restaurant }) {
     >
       <div className="h-44 bg-gray-100 overflow-hidden">
         <img
-          src={r.image || `https://placehold.co/400x250/FF6B35/white?text=${encodeURIComponent(r.name)}`}
+          src={mediaUrl(r.image) || `https://placehold.co/400x250/FF6B35/white?text=${encodeURIComponent(r.name)}`}
           alt={r.name}
           className="w-full h-full object-cover"
         />

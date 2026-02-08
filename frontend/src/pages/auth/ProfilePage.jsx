@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import API from '../../services/api';
+import API, { mediaUrl } from '../../services/api';
 import toast from 'react-hot-toast';
 import { FiUser, FiCamera, FiSave } from 'react-icons/fi';
 
@@ -39,7 +39,7 @@ export default function ProfilePage() {
           address: data.address || '',
           city: data.city || '',
         });
-        if (data.profile_image) setImagePreview(data.profile_image);
+        if (data.profile_image) setImagePreview(mediaUrl(data.profile_image));
       })
       .catch(() => toast.error('Failed to load profile'))
       .finally(() => setProfileLoading(false));

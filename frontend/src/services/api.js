@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+export const BACKEND_URL = 'http://localhost:8000';
+
+export function mediaUrl(path) {
+  if (!path) return null;
+  if (path.startsWith('http')) return path;
+  return `${BACKEND_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+}
+
 const API = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: `${BACKEND_URL}/api/`,
 });
 
 API.interceptors.request.use((config) => {

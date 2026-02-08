@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
 import { FiUploadCloud, FiX } from 'react-icons/fi';
+import { mediaUrl } from '../../services/api';
 import toast from 'react-hot-toast';
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export default function ImageUpload({ label, currentImage, onSelect, className = '' }) {
   const inputRef = useRef();
-  const [preview, setPreview] = useState(currentImage || null);
+  const [preview, setPreview] = useState(currentImage ? mediaUrl(currentImage) : null);
 
   const handleFile = (e) => {
     const file = e.target.files[0];

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   FiPlus, FiEdit2, FiTrash2, FiChevronDown, FiChevronUp, FiX,
 } from 'react-icons/fi';
-import API from '../../services/api';
+import API, { mediaUrl } from '../../services/api';
 import ImageUpload from '../../components/common/ImageUpload';
 import EmptyState from '../../components/common/EmptyState';
 import { formatPrice } from '../../utils/currency';
@@ -239,7 +239,7 @@ export default function MenuManagementPage() {
                             className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
                             <div className="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                               <img
-                                src={item.image || `https://placehold.co/100x100/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
+                                src={mediaUrl(item.image) || `https://placehold.co/100x100/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
                                 alt="" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">

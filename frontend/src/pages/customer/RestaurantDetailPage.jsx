@@ -6,7 +6,7 @@ import {
   FiPhone,
   FiShoppingCart,
 } from 'react-icons/fi';
-import API from '../../services/api';
+import API, { mediaUrl } from '../../services/api';
 import StarRating from '../../components/common/StarRating';
 import MenuItemCard from '../../components/common/MenuItemCard';
 import { MenuItemSkeleton } from '../../components/common/LoadingSkeleton';
@@ -90,7 +90,7 @@ export default function RestaurantDetailPage() {
       {/* Cover */}
       <div className="relative h-56 sm:h-72 bg-gray-200">
         <img
-          src={r.image || `https://placehold.co/1200x400/FF6B35/white?text=${encodeURIComponent(r.name)}`}
+          src={mediaUrl(r.image) || `https://placehold.co/1200x400/FF6B35/white?text=${encodeURIComponent(r.name)}`}
           alt={r.name}
           className="w-full h-full object-cover"
         />
@@ -103,7 +103,7 @@ export default function RestaurantDetailPage() {
           {/* Logo */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow shrink-0 -mt-14 sm:-mt-16">
             <img
-              src={r.logo || `https://placehold.co/200x200/004E89/white?text=${encodeURIComponent(r.name[0])}`}
+              src={mediaUrl(r.logo) || `https://placehold.co/200x200/004E89/white?text=${encodeURIComponent(r.name[0])}`}
               alt=""
               className="w-full h-full object-cover"
             />

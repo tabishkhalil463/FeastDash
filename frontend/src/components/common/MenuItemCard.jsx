@@ -1,4 +1,5 @@
 import { formatPrice } from '../../utils/currency';
+import { mediaUrl } from '../../services/api';
 
 export default function MenuItemCard({ item, onAddToCart, cartQty = 0, onIncrease, onDecrease }) {
   return (
@@ -6,7 +7,7 @@ export default function MenuItemCard({ item, onAddToCart, cartQty = 0, onIncreas
       {/* Image */}
       <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-gray-100 overflow-hidden shrink-0">
         <img
-          src={item.image || `https://placehold.co/200x200/f3f4f6/9ca3af?text=${encodeURIComponent(item.name)}`}
+          src={mediaUrl(item.image) || `https://placehold.co/200x200/f3f4f6/9ca3af?text=${encodeURIComponent(item.name)}`}
           alt={item.name}
           className="w-full h-full object-cover"
         />
