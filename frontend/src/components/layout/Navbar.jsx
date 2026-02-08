@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import CartDrawer from '../customer/CartDrawer';
 import {
   FiMenu,
   FiX,
@@ -27,9 +29,11 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
+  const { itemsCount } = useCart();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const dropdownRef = useRef();
 
   useEffect(() => {
@@ -50,6 +54,7 @@ export default function Navbar() {
   };
 
   return (
+    <>
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -77,12 +82,17 @@ export default function Navbar() {
             {isAuthenticated ? (
               <>
                 {user?.user_type === 'customer' && (
-                  <Link
-                    to="/cart"
+                  <button
+                    onClick={() => setCartOpen(true)}
                     className="relative text-gray-600 hover:text-primary transition"
                   >
                     <FiShoppingCart size={22} />
-                  </Link>
+                    {itemsCount > 0 && (
+                      <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                        {itemsCount > 9 ? '9+' : itemsCount}
+                      </span>
+                    )}
+                  </button>
                 )}
 
                 {/* User dropdown */}
@@ -269,5 +279,8 @@ export default function Navbar() {
         </>
       )}
     </nav>
+
+    <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+    </>
   );
 }

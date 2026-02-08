@@ -12,11 +12,19 @@ import ProfilePage from './pages/auth/ProfilePage';
 import HomePage from './pages/customer/HomePage';
 import RestaurantListPage from './pages/customer/RestaurantListPage';
 import RestaurantDetailPage from './pages/customer/RestaurantDetailPage';
+import CartPage from './pages/customer/CartPage';
+import CheckoutPage from './pages/customer/CheckoutPage';
+import CustomerOrdersPage from './pages/customer/CustomerOrdersPage';
+import OrderDetailPage from './pages/customer/OrderDetailPage';
 
 // Restaurant owner pages
 import RestaurantDashboard from './pages/restaurant/RestaurantDashboard';
 import RestaurantSetupPage from './pages/restaurant/RestaurantSetupPage';
 import MenuManagementPage from './pages/restaurant/MenuManagementPage';
+import RestaurantOrdersPage from './pages/restaurant/RestaurantOrdersPage';
+
+// Driver pages
+import DriverDashboard from './pages/driver/DriverDashboard';
 
 // Placeholder component for pages not yet built
 function Placeholder({ title }) {
@@ -30,12 +38,6 @@ function Placeholder({ title }) {
 const SearchPage = () => <Placeholder title="Search" />;
 const AboutPage = () => <Placeholder title="About" />;
 const ContactPage = () => <Placeholder title="Contact" />;
-const CartPage = () => <Placeholder title="Cart" />;
-const CheckoutPage = () => <Placeholder title="Checkout" />;
-const CustomerOrdersPage = () => <Placeholder title="My Orders" />;
-const OrderDetailPage = () => <Placeholder title="Order Detail" />;
-const RestaurantOrdersPage = () => <Placeholder title="Restaurant Orders" />;
-const DriverDashboard = () => <Placeholder title="Driver Dashboard" />;
 const AdminDashboard = () => <Placeholder title="Admin Dashboard" />;
 const AdminUsersPage = () => <Placeholder title="Admin Users" />;
 const AdminRestaurantsPage = () => <Placeholder title="Admin Restaurants" />;

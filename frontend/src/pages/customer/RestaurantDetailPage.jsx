@@ -7,18 +7,21 @@ import {
   FiShoppingCart,
 } from 'react-icons/fi';
 import API, { mediaUrl } from '../../services/api';
+import { useCart } from '../../context/CartContext';
 import StarRating from '../../components/common/StarRating';
 import MenuItemCard from '../../components/common/MenuItemCard';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { MenuItemSkeleton } from '../../components/common/LoadingSkeleton';
 import { formatPrice } from '../../utils/currency';
 import toast from 'react-hot-toast';
 
 export default function RestaurantDetailPage() {
   const { slug } = useParams();
+  const cart = useCart();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [cart, setCart] = useState({});          // { itemId: qty }
+  const [conflict, setConflict] = useState(null);
   const categoryRefs = useRef({});
 
   useEffect(() => {
@@ -38,30 +41,22 @@ export default function RestaurantDetailPage() {
     categoryRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const addToCart = (item) => setCart((c) => ({ ...c, [item.id]: 1 }));
-  const increase = (item) => setCart((c) => ({ ...c, [item.id]: (c[item.id] || 0) + 1 }));
-  const decrease = (item) =>
-    setCart((c) => {
-      const qty = (c[item.id] || 0) - 1;
-      if (qty <= 0) {
-        const { [item.id]: _, ...rest } = c;
-        return rest;
-      }
-      return { ...c, [item.id]: qty };
-    });
+  const cartQtyMap = {};
+  cart.items.forEach((ci) => { cartQtyMap[ci.menu_item.id] = { qty: ci.quantity, cartItemId: ci.id }; });
 
-  const cartItems = Object.values(cart);
-  const totalQty = cartItems.reduce((s, q) => s + q, 0);
-  const totalAmount = restaurant?.menu_categories?.reduce((sum, cat) => {
-    return (
-      sum +
-      cat.items.reduce((s, item) => {
-        const qty = cart[item.id] || 0;
-        const price = item.discounted_price || item.price;
-        return s + qty * Number(price);
-      }, 0)
-    );
-  }, 0) || 0;
+  const handleAdd = async (item) => {
+    const res = await cart.addToCart(item.id);
+    if (res.conflict) {
+      setConflict({ itemId: item.id, currentRestaurant: res.currentRestaurant });
+    }
+  };
+  const handleIncrease = (item) => cart.addToCart(item.id);
+  const handleDecrease = (item) => {
+    const entry = cartQtyMap[item.id];
+    if (entry) cart.updateQuantity(entry.cartItemId, entry.qty - 1);
+  };
+
+  const { grandTotal } = cart.getCartTotal();
 
   if (loading) {
     return (
@@ -221,10 +216,10 @@ export default function RestaurantDetailPage() {
                         <MenuItemCard
                           key={item.id}
                           item={item}
-                          cartQty={cart[item.id] || 0}
-                          onAddToCart={addToCart}
-                          onIncrease={increase}
-                          onDecrease={decrease}
+                          cartQty={cartQtyMap[item.id]?.qty || 0}
+                          onAddToCart={handleAdd}
+                          onIncrease={handleIncrease}
+                          onDecrease={handleDecrease}
                         />
                       ))}
                     </div>
@@ -245,7 +240,7 @@ export default function RestaurantDetailPage() {
       </div>
 
       {/* Sticky Cart Bar */}
-      {totalQty > 0 && (
+      {cart.itemsCount > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -254,10 +249,10 @@ export default function RestaurantDetailPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900">
-                  {totalQty} item{totalQty !== 1 ? 's' : ''} in cart
+                  {cart.itemsCount} item{cart.itemsCount !== 1 ? 's' : ''} in cart
                 </p>
                 <p className="text-sm text-gray-500">
-                  Total: {formatPrice(totalAmount)}
+                  Total: {formatPrice(grandTotal)}
                 </p>
               </div>
             </div>
@@ -270,6 +265,21 @@ export default function RestaurantDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Restaurant Conflict Dialog */}
+      <ConfirmDialog
+        open={!!conflict}
+        title="Replace cart items?"
+        message={`Your cart has items from ${conflict?.currentRestaurant}. Adding this item will clear your current cart.`}
+        confirmLabel="Clear & Add"
+        confirmColor="bg-red-500"
+        onCancel={() => setConflict(null)}
+        onConfirm={async () => {
+          await cart.clearCart();
+          await cart.addToCart(conflict.itemId);
+          setConflict(null);
+        }}
+      />
     </div>
   );
 }
