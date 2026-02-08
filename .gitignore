@@ -1,0 +1,38 @@
+# Environment variables
+.env
+.env.local
+.env.production
+*.env
+!.env.example
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info
+db.sqlite3
+*.sqlite3
+
+# Node
+node_modules/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Media uploads
+media/uploads/
+
+# Logs
+*.log
+npm-debug.log*
