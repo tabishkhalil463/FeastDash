@@ -26,6 +26,7 @@ export default function ProfilePage() {
     confirm_new_password: '',
   });
   const [pwLoading, setPwLoading] = useState(false);
+  const [avatarHover, setAvatarHover] = useState(false);
 
   useEffect(() => {
     API.get('auth/profile/')
@@ -115,9 +116,13 @@ export default function ProfilePage() {
       >
         {/* Avatar */}
         <div className="flex items-center gap-4 mb-6">
-          <div
-            className="relative w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer group"
+          <button
+            type="button"
+            style={{ width: 80, height: 80 }}
+            className="relative shrink-0 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer"
             onClick={() => fileRef.current?.click()}
+            onMouseEnter={() => setAvatarHover(true)}
+            onMouseLeave={() => setAvatarHover(false)}
           >
             {imagePreview ? (
               <img
@@ -128,10 +133,13 @@ export default function ProfilePage() {
             ) : (
               <FiUser size={32} className="text-gray-400" />
             )}
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+            <div
+              className="absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity"
+              style={{ opacity: avatarHover ? 1 : 0 }}
+            >
               <FiCamera className="text-white" size={20} />
             </div>
-          </div>
+          </button>
           <div>
             <p className="font-medium text-gray-900">
               {profile.first_name} {profile.last_name}

@@ -1,0 +1,171 @@
+[33mcommit ae719da7c2a29475dff95e45ed5f0f148ac26bff[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Sheraz Haider <sheraz.haider.712@gmail.com>
+Date:   Sun Feb 8 13:55:54 2026 +0500
+
+    Phase 2: Authentication & user management
+    
+    Backend:
+    - JWT auth endpoints: register, login, logout, profile, change-password, token refresh
+    - Custom serializers with Pakistani phone validation (03XXXXXXXXX)
+    - Role-based permissions: IsCustomer, IsRestaurantOwner, IsDeliveryDriver, IsAdminUser
+    - Token blacklist for secure logout
+    
+    Frontend:
+    - Axios API service with interceptors (auto-attach token, 401 refresh)
+    - AuthContext with useReducer (login, register, logout, updateProfile)
+    - Login/Register/Profile pages with full Tailwind styling and validation
+    - Navbar with user dropdown, mobile sidebar, cart icon
+    - Footer with 4-column layout
+    - ProtectedRoute with role-based access control
+    - All app routes configured with placeholder pages
+    
+    Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+
+[1mdiff --git a/backend/accounts/permissions.py b/backend/accounts/permissions.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..74447b0[m
+[1m--- /dev/null[m
+[1m+++ b/backend/accounts/permissions.py[m
+[36m@@ -0,0 +1,21 @@[m
+[32m+[m[32mfrom rest_framework.permissions import BasePermission[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass IsCustomer(BasePermission):[m
+[32m+[m[32m    def has_permission(self, request, view):[m
+[32m+[m[32m        return request.user.is_authenticated and request.user.user_type == 'customer'[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass IsRestaurantOwner(BasePermission):[m
+[32m+[m[32m    def has_permission(self, request, view):[m
+[32m+[m[32m        return request.user.is_authenticated and request.user.user_type == 'restaurant_owner'[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass IsDeliveryDriver(BasePermission):[m
+[32m+[m[32m    def has_permission(self, request, view):[m
+[32m+[m[32m        return request.user.is_authenticated and request.user.user_type == 'delivery_driver'[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass IsAdminUser(BasePermission):[m
+[32m+[m[32m    def has_permission(self, request, view):[m
+[32m+[m[32m        return request.user.is_authenticated and request.user.user_type == 'admin'[m
+[1mdiff --git a/backend/accounts/serializers.py b/backend/accounts/serializers.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..53bc01b[m
+[1m--- /dev/null[m
+[1m+++ b/backend/accounts/serializers.py[m
+[36m@@ -0,0 +1,104 @@[m
+[32m+[m[32mimport re[m
+[32m+[m[32mfrom rest_framework import serializers[m
+[32m+[m[32mfrom django.contrib.auth import authenticate[m
+[32m+[m[32mfrom rest_framework_simplejwt.tokens import RefreshToken[m
+[32m+[m[32mfrom .models import CustomUser, DeliveryDriverProfile[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass UserRegistrationSerializer(serializers.ModelSerializer):[m
+[32m+[m[32m    password = serializers.CharField(write_only=True, min_length=8)[m
+[32m+[m[32m    confirm_password = serializers.CharField(write_only=True)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        model = CustomUser[m
+[32m+[m[32m        fields = [[m
+[32m+[m[32m            'id', 'username', 'email', 'first_name', 'last_name',[m
+[32m+[m[32m            'phone', 'user_type', 'password', 'confirm_password',[m
+[32m+[m[32m        ][m
+[32m+[m
+[32m+[m[32m    def validate_email(self, value):[m
+[32m+[m[32m        if CustomUser.objects.filter(email=value).exists():[m
+[32m+[m[32m            raise serializers.ValidationError("A user with this email already exists.")[m
+[32m+[m[32m        return value.lower()[m
+[32m+[m
+[32m+[m[32m    def validate_phone(self, value):[m
+[32m+[m[32m        if value and not re.match(r'^03\d{9}$', value):[m
+[32m+[m[32m            raise serializers.ValidationError([m
+[32m+[m[32m                "Enter a valid Pakistani phone number (03XXXXXXXXX, 11 digits)."[m
+[32m+[m[32m            )[m
+[32m+[m[32m        return value[m
+[32m+[m
+[32m+[m[32m    def validate(self, data):[m
+[32m+[m[32m        if data['password'] != data['confirm_password']:[m
+[32m+[m[32m            raise serializers.ValidationError({"confirm_password": "Passwords do not match."})[m
+[32m+[m[32m        return data[m
+[32m+[m
+[32m+[m[32m    def create(self, validated_data):[m
+[32m+[m[32m        validated_data.pop('confirm_password')[m
+[32m+[m[32m        password = validated_data.pop('password')[m
+[32m+[m[32m        user = CustomUser(**validated_data)[m
+[32m+[m[32m        user.set_password(password)[m
+[32m+[m[32m        user.save()[m
+[32m+[m[32m        return user[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass UserLoginSerializer(serializers.Serializer):[m
+[32m+[m[32m    email = serializers.EmailField()[m
+[32m+[m[32m    password = serializers.CharField()[m
+[32m+[m
+[32m+[m[32m    def validate(self, data):[m
+[32m+[m[32m        email = data.get('email', '').lower()[m
+[32m+[m[32m        password = data.get('password')[m
+[32m+[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            user_obj = CustomUser.objects.get(email=email)[m
+[32m+[m[32m        except CustomUser.DoesNotExist:[m
+[32m+[m[32m            raise serializers.ValidationError("Invalid email or password.")[m
+[32m+[m
+[32m+[m[32m        user = authenticate(username=user_obj.username, password=password)[m
+[32m+[m[32m        if not user:[m
+[32m+[m[32m            raise serializers.ValidationError("Invalid email or password.")[m
+[32m+[m[32m        if not user.is_active:[m
+[32m+[m[32m            raise serializers.ValidationError("This account is disabled.")[m
+[32m+[m
+[32m+[m[32m        data['user'] = user[m
+[32m+[m[32m        return data[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass UserProfileSerializer(serializers.ModelSerializer):[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        model = CustomUser[m
+[32m+[m[32m        fields = [[m
+[32m+[m[32m            'id', 'username', 'email', 'first_name', 'last_name',[m
+[32m+[m[32m            'phone', 'address', 'city', 'profile_image', 'user_type',[m
+[32m+[m[32m            'created_at',[m
+[32m+[m[32m        ][m
+[32m+[m[32m        read_only_fields = ['id', 'email', 'user_type', 'created_at'][m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass ChangePasswordSerializer(serializers.Serializer):[m
+[32m+[m[32m    old_password = serializers.CharField()[m
+[32m+[m[32m    new_password = serializers.CharField(min_length=8)[m
+[32m+[m[32m    confirm_new_password = serializers.CharField()[m
+[32m+[m
+[32m+[m[32m    def validate_old_password(self, value):[m
+[32m+[m[32m        user = self.context['request'].user[m
+[32m+[m[32m        if not user.check_password(value):[m
+[32m+[m[32m            raise serializers.ValidationError("Old password is incorrect.")[m
+[32m+[m[32m        return value[m
+[32m+[m
+[32m+[m[32m    def validate(self, data):[m
+[32m+[m[32m        if data['new_password'] != data['confirm_new_password']:[m
+[32m+[m[32m            raise serializers.ValidationError([m
+[32m+[m[32m                {"confirm_new_password": "New passwords do not match."}[m
+[32m+[m[32m            )[m
+[32m+[m[32m        return data[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass DriverProfileSerializer(serializers.ModelSerializer):[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        model = DeliveryDriverProfile[m
+[32m+[m[32m        fields = [[m
+[32m+[m[32m            'id', 'vehicle_type', 'license_number', 'is_available',[m
+[32m+[m[32m            'current_latitude', 'current_longitude',[m
+[32m+[m[32m        ][m
+[1mdiff --git a/backend/accounts/urls.py b/backend/accounts/urls.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5eff2c2[m
+[1m--- /dev/null[m
+[1m+++ b/backend/accounts/urls.py[m
+[36m@@ -0,0 +1,12 @@[m
+[32m+[m[32mfrom django.urls import path[m
+[32m+[m[32mfrom rest_framework_simplejwt.views import TokenRefreshView[m
+[32m+[m[32mfrom . import views[m
+[32m+[m
+[32m+
