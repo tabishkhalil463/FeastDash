@@ -8,6 +8,16 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ProfilePage from './pages/auth/ProfilePage';
 
+// Customer pages
+import HomePage from './pages/customer/HomePage';
+import RestaurantListPage from './pages/customer/RestaurantListPage';
+import RestaurantDetailPage from './pages/customer/RestaurantDetailPage';
+
+// Restaurant owner pages
+import RestaurantDashboard from './pages/restaurant/RestaurantDashboard';
+import RestaurantSetupPage from './pages/restaurant/RestaurantSetupPage';
+import MenuManagementPage from './pages/restaurant/MenuManagementPage';
+
 // Placeholder component for pages not yet built
 function Placeholder({ title }) {
   return (
@@ -17,36 +27,20 @@ function Placeholder({ title }) {
   );
 }
 
-// Public pages
-const HomePage = () => <Placeholder title="Home" />;
-const RestaurantListPage = () => <Placeholder title="Restaurants" />;
-const RestaurantDetailPage = () => <Placeholder title="Restaurant Detail" />;
 const SearchPage = () => <Placeholder title="Search" />;
 const AboutPage = () => <Placeholder title="About" />;
 const ContactPage = () => <Placeholder title="Contact" />;
-
-// Customer pages
 const CartPage = () => <Placeholder title="Cart" />;
 const CheckoutPage = () => <Placeholder title="Checkout" />;
 const CustomerOrdersPage = () => <Placeholder title="My Orders" />;
 const OrderDetailPage = () => <Placeholder title="Order Detail" />;
-
-// Restaurant owner pages
-const RestaurantDashboard = () => <Placeholder title="Restaurant Dashboard" />;
-const MenuManagementPage = () => <Placeholder title="Menu Management" />;
 const RestaurantOrdersPage = () => <Placeholder title="Restaurant Orders" />;
-const RestaurantSetupPage = () => <Placeholder title="Restaurant Setup" />;
-
-// Driver pages
 const DriverDashboard = () => <Placeholder title="Driver Dashboard" />;
-
-// Admin pages
 const AdminDashboard = () => <Placeholder title="Admin Dashboard" />;
 const AdminUsersPage = () => <Placeholder title="Admin Users" />;
 const AdminRestaurantsPage = () => <Placeholder title="Admin Restaurants" />;
 const AdminOrdersPage = () => <Placeholder title="Admin Orders" />;
 
-// 404
 const NotFoundPage = () => (
   <div className="p-8 text-center min-h-[60vh] flex flex-col items-center justify-center">
     <h1 className="text-6xl font-bold text-primary">404</h1>
@@ -54,7 +48,6 @@ const NotFoundPage = () => (
   </div>
 );
 
-// Redirect authenticated users away from auth pages
 function GuestRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return null;

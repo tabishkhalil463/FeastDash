@@ -30,8 +30,8 @@ desktop.ini
 *.swp
 *.swo
 
-# Media uploads
-media/uploads/
+# Media uploads (all user-uploaded files)
+**/media/
 
 # Logs
 *.log
