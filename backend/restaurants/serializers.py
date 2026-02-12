@@ -18,7 +18,7 @@ class RestaurantListSerializer(serializers.ModelSerializer):
             'id', 'name', 'slug', 'image', 'logo', 'cuisine_type',
             'average_rating', 'total_reviews', 'delivery_fee',
             'formatted_delivery_fee', 'estimated_delivery_time',
-            'minimum_order', 'is_active', 'city',
+            'minimum_order', 'is_active', 'is_approved', 'city',
         ]
 
     def get_formatted_delivery_fee(self, obj):

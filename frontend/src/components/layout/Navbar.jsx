@@ -12,6 +12,7 @@ import {
   FiPackage,
   FiGrid,
   FiLogOut,
+  FiSearch,
 } from 'react-icons/fi';
 
 const DASHBOARDS = {
@@ -79,6 +80,9 @@ export default function Navbar() {
 
           {/* Desktop right side */}
           <div className="hidden md:flex items-center gap-4">
+            <Link to="/search" className="text-gray-600 hover:text-primary transition">
+              <FiSearch size={20} />
+            </Link>
             {isAuthenticated ? (
               <>
                 {user?.user_type === 'customer' && (

@@ -6,6 +6,7 @@ import {
   FiPhone,
   FiShoppingCart,
 } from 'react-icons/fi';
+import { HiStar } from 'react-icons/hi2';
 import API, { mediaUrl } from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import StarRating from '../../components/common/StarRating';
@@ -24,6 +25,13 @@ export default function RestaurantDetailPage() {
   const [conflict, setConflict] = useState(null);
   const categoryRefs = useRef({});
 
+  // Reviews state
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [reviewPage, setReviewPage] = useState(1);
+  const [hasMoreReviews, setHasMoreReviews] = useState(false);
+  const [ratingDist, setRatingDist] = useState({ 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 });
+
   useEffect(() => {
     API.get(`restaurants/${slug}/`)
       .then(({ data }) => {
@@ -35,6 +43,34 @@ export default function RestaurantDetailPage() {
       .catch(() => toast.error('Failed to load restaurant'))
       .finally(() => setLoading(false));
   }, [slug]);
+
+  // Fetch reviews
+  useEffect(() => {
+    setReviewsLoading(true);
+    API.get(`restaurants/${slug}/reviews/?page=${reviewPage}`)
+      .then(({ data }) => {
+        const newReviews = data.results || [];
+        if (reviewPage === 1) {
+          setReviews(newReviews);
+          // Compute rating distribution from first page
+          const dist = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+          newReviews.forEach((r) => { dist[r.rating] = (dist[r.rating] || 0) + 1; });
+          setRatingDist(dist);
+        } else {
+          setReviews((prev) => {
+            const existing = new Set(prev.map((r) => r.id));
+            const unique = newReviews.filter((r) => !existing.has(r.id));
+            return [...prev, ...unique];
+          });
+          newReviews.forEach((r) => {
+            setRatingDist((prev) => ({ ...prev, [r.rating]: (prev[r.rating] || 0) + 1 }));
+          });
+        }
+        setHasMoreReviews(!!data.next);
+      })
+      .catch(() => {})
+      .finally(() => setReviewsLoading(false));
+  }, [slug, reviewPage]);
 
   const scrollToCategory = (id) => {
     setActiveCategory(id);
@@ -78,7 +114,8 @@ export default function RestaurantDetailPage() {
   }
 
   const r = restaurant;
-  const isOpen = true; // simplified — could compare opening_time/closing_time
+  const isOpen = true;
+  const maxDist = Math.max(...Object.values(ratingDist), 1);
 
   return (
     <div>
@@ -95,7 +132,6 @@ export default function RestaurantDetailPage() {
       {/* Info bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10 mb-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6 flex flex-col sm:flex-row gap-5">
-          {/* Logo */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow shrink-0 -mt-14 sm:-mt-16">
             <img
               src={mediaUrl(r.logo) || `https://placehold.co/200x200/004E89/white?text=${encodeURIComponent(r.name[0])}`}
@@ -115,9 +151,7 @@ export default function RestaurantDetailPage() {
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  isOpen
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
+                  isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                 }`}
               >
                 {isOpen ? 'Open' : 'Closed'}
@@ -127,25 +161,13 @@ export default function RestaurantDetailPage() {
               <StarRating rating={r.average_rating} reviews={r.total_reviews} />
             </div>
             <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
-              <span className="flex items-center gap-1">
-                <FiClock size={14} /> {r.estimated_delivery_time} min
-              </span>
-              <span className="flex items-center gap-1">
-                Delivery: {r.formatted_delivery_fee}
-              </span>
-              <span className="flex items-center gap-1">
-                <FiMapPin size={14} /> {r.address}, {r.city}
-              </span>
-              {r.phone && (
-                <span className="flex items-center gap-1">
-                  <FiPhone size={14} /> {r.phone}
-                </span>
-              )}
+              <span className="flex items-center gap-1"><FiClock size={14} /> {r.estimated_delivery_time} min</span>
+              <span className="flex items-center gap-1">Delivery: {r.formatted_delivery_fee}</span>
+              <span className="flex items-center gap-1"><FiMapPin size={14} /> {r.address}, {r.city}</span>
+              {r.phone && <span className="flex items-center gap-1"><FiPhone size={14} /> {r.phone}</span>}
             </div>
             {r.minimum_order > 0 && (
-              <p className="text-xs text-gray-400 mt-2">
-                Minimum order: {r.formatted_minimum_order}
-              </p>
+              <p className="text-xs text-gray-400 mt-2">Minimum order: {r.formatted_minimum_order}</p>
             )}
           </div>
         </div>
@@ -154,12 +176,9 @@ export default function RestaurantDetailPage() {
       {/* Menu */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
         <div className="flex gap-8">
-          {/* Category tabs */}
           {r.menu_categories?.length > 0 && (
             <nav className="hidden lg:block w-48 shrink-0 sticky top-20 self-start">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
-                Menu
-              </h3>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Menu</h3>
               <ul className="space-y-1">
                 {r.menu_categories.map((cat) => (
                   <li key={cat.id}>
@@ -179,9 +198,7 @@ export default function RestaurantDetailPage() {
             </nav>
           )}
 
-          {/* Menu items */}
           <div className="flex-1 min-w-0">
-            {/* Mobile category tabs */}
             {r.menu_categories?.length > 0 && (
               <div className="lg:hidden flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide">
                 {r.menu_categories.map((cat) => (
@@ -207,9 +224,7 @@ export default function RestaurantDetailPage() {
                   ref={(el) => (categoryRefs.current[cat.id] = el)}
                   className="mb-10 scroll-mt-20"
                 >
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    {cat.name}
-                  </h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">{cat.name}</h2>
                   {cat.items?.length > 0 ? (
                     <div className="space-y-4">
                       {cat.items.map((item) => (
@@ -224,9 +239,7 @@ export default function RestaurantDetailPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-sm">
-                      No items in this category yet.
-                    </p>
+                    <p className="text-gray-400 text-sm">No items in this category yet.</p>
                   )}
                 </section>
               ))
@@ -235,6 +248,77 @@ export default function RestaurantDetailPage() {
                 Menu is being prepared. Check back soon!
               </p>
             )}
+
+            {/* Reviews Section */}
+            <section className="mt-12 pt-8 border-t border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
+
+              {/* Average rating + distribution */}
+              <div className="flex flex-col sm:flex-row gap-8 mb-8">
+                <div className="text-center sm:text-left shrink-0">
+                  <p className="text-5xl font-bold text-gray-900">{Number(r.average_rating).toFixed(1)}</p>
+                  <div className="mt-1">
+                    <StarRating rating={r.average_rating} reviews={r.total_reviews} />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">({r.total_reviews} reviews)</p>
+                </div>
+
+                <div className="flex-1 space-y-2">
+                  {[5, 4, 3, 2, 1].map((star) => (
+                    <div key={star} className="flex items-center gap-2">
+                      <span className="text-sm text-gray-600 w-6 flex items-center gap-0.5">{star}<HiStar size={12} className="text-yellow-400" /></span>
+                      <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-yellow-400 rounded-full transition-all"
+                          style={{ width: `${(ratingDist[star] / maxDist) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-sm text-gray-500 w-8 text-right">{ratingDist[star]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Individual reviews */}
+              {reviews.length === 0 && !reviewsLoading ? (
+                <p className="text-gray-400 text-center py-8">No reviews yet. Be the first!</p>
+              ) : (
+                <div className="space-y-4">
+                  {reviews.map((review) => (
+                    <div key={review.id} className="bg-white border border-gray-100 rounded-xl p-4 flex gap-4">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
+                        {review.user_name?.[0]?.toUpperCase() || 'U'}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="font-medium text-gray-900 text-sm">{review.user_name}</p>
+                          <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString('en-PK')}</span>
+                        </div>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <HiStar key={i} size={14} className={i < review.rating ? 'text-yellow-400' : 'text-gray-200'} />
+                          ))}
+                        </div>
+                        {review.comment && <p className="text-sm text-gray-600 mt-2">{review.comment}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Load more */}
+              {hasMoreReviews && (
+                <div className="text-center mt-6">
+                  <button
+                    onClick={() => setReviewPage((p) => p + 1)}
+                    disabled={reviewsLoading}
+                    className="px-6 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+                  >
+                    {reviewsLoading ? 'Loading...' : 'Load More Reviews'}
+                  </button>
+                </div>
+              )}
+            </section>
           </div>
         </div>
       </div>
@@ -251,9 +335,7 @@ export default function RestaurantDetailPage() {
                 <p className="font-medium text-gray-900">
                   {cart.itemsCount} item{cart.itemsCount !== 1 ? 's' : ''} in cart
                 </p>
-                <p className="text-sm text-gray-500">
-                  Total: {formatPrice(grandTotal)}
-                </p>
+                <p className="text-sm text-gray-500">Total: {formatPrice(grandTotal)}</p>
               </div>
             </div>
             <Link
@@ -266,7 +348,6 @@ export default function RestaurantDetailPage() {
         </div>
       )}
 
-      {/* Restaurant Conflict Dialog */}
       <ConfirmDialog
         open={!!conflict}
         title="Replace cart items?"

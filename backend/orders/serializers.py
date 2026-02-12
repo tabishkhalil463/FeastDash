@@ -177,15 +177,21 @@ class OrderCreateSerializer(serializers.Serializer):
 class OrderListSerializer(serializers.ModelSerializer):
     restaurant_name = serializers.CharField(source='restaurant.name')
     restaurant_image = serializers.ImageField(source='restaurant.image')
+    customer_name = serializers.SerializerMethodField()
     items_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = [
             'id', 'order_number', 'restaurant_name', 'restaurant_image',
-            'status', 'grand_total', 'items_count', 'payment_method',
-            'payment_status', 'created_at',
+            'customer_name', 'status', 'grand_total', 'items_count',
+            'payment_method', 'payment_status', 'delivery_address',
+            'delivery_city', 'special_instructions', 'created_at',
         ]
+
+    def get_customer_name(self, obj):
+        full = obj.user.get_full_name()
+        return full if full.strip() else obj.user.username
 
     def get_items_count(self, obj):
         return obj.items.count()
@@ -194,6 +200,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 class OrderDetailSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
     restaurant_name = serializers.CharField(source='restaurant.name')
+    restaurant_slug = serializers.CharField(source='restaurant.slug')
     restaurant_image = serializers.ImageField(source='restaurant.image')
     restaurant_phone = serializers.CharField(source='restaurant.phone')
     driver_name = serializers.SerializerMethodField()
@@ -203,7 +210,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'order_number', 'restaurant', 'restaurant_name',
-            'restaurant_image', 'restaurant_phone', 'status',
+            'restaurant_slug', 'restaurant_image', 'restaurant_phone', 'status',
             'total_amount', 'delivery_fee', 'tax_amount', 'grand_total',
             'delivery_address', 'delivery_city', 'payment_method',
             'payment_status', 'special_instructions', 'estimated_delivery',

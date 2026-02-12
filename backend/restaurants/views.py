@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count, Sum, Q
+from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery
 from accounts.permissions import IsRestaurantOwner
 from .models import Restaurant, RestaurantCategory
 from .serializers import (
@@ -12,6 +13,7 @@ from .serializers import (
     RestaurantDetailSerializer,
     RestaurantCreateUpdateSerializer,
 )
+from menu.models import MenuItem
 
 
 class RestaurantCategoryListView(generics.ListAPIView):
@@ -120,3 +122,60 @@ class RestaurantOwnerDashboardView(APIView):
             },
             'recent_orders': recent_list,
         })
+
+
+class SearchView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        q = request.query_params.get('q', '').strip()
+        if not q:
+            return Response({'restaurants': [], 'menu_items': []})
+
+        search_query = SearchQuery(q)
+
+        # Search restaurants
+        restaurants = (
+            Restaurant.objects.filter(is_active=True, is_approved=True)
+            .annotate(
+                search=SearchVector('name', 'cuisine_type', 'description'),
+                rank=SearchRank(SearchVector('name', 'cuisine_type', 'description'), search_query),
+            )
+            .filter(search=search_query)
+            .order_by('-rank')[:10]
+        )
+        restaurant_data = RestaurantListSerializer(restaurants, many=True).data
+
+        # Search menu items
+        menu_items = (
+            MenuItem.objects.filter(
+                is_available=True,
+                restaurant__is_active=True,
+                restaurant__is_approved=True,
+            )
+            .annotate(
+                search=SearchVector('name', 'description'),
+                rank=SearchRank(SearchVector('name', 'description'), search_query),
+            )
+            .filter(search=search_query)
+            .select_related('restaurant')
+            .order_by('-rank')[:15]
+        )
+        menu_data = [
+            {
+                'id': item.id,
+                'name': item.name,
+                'slug': item.slug,
+                'description': item.description,
+                'price': str(item.price),
+                'discounted_price': str(item.discounted_price) if item.discounted_price else None,
+                'image': item.image.url if item.image else None,
+                'is_vegetarian': item.is_vegetarian,
+                'is_spicy': item.is_spicy,
+                'restaurant_name': item.restaurant.name,
+                'restaurant_slug': item.restaurant.slug,
+            }
+            for item in menu_items
+        ]
+
+        return Response({'restaurants': restaurant_data, 'menu_items': menu_data})

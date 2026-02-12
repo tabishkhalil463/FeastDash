@@ -128,6 +128,13 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+# DRF Spectacular
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'FeastDash API',
+    'DESCRIPTION': 'Food delivery platform API',
+    'VERSION': '1.0.0',
+}
+
 # drf-spectacular
 SPECTACULAR_SETTINGS = {
     'TITLE': 'FeastDash API',

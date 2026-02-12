@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import AdminLayout from './components/admin/AdminLayout';
 
 // Auth pages
 import LoginPage from './pages/auth/LoginPage';
@@ -16,6 +17,9 @@ import CartPage from './pages/customer/CartPage';
 import CheckoutPage from './pages/customer/CheckoutPage';
 import CustomerOrdersPage from './pages/customer/CustomerOrdersPage';
 import OrderDetailPage from './pages/customer/OrderDetailPage';
+import SearchPage from './pages/customer/SearchPage';
+import AboutPage from './pages/customer/AboutPage';
+import ContactPage from './pages/customer/ContactPage';
 
 // Restaurant owner pages
 import RestaurantDashboard from './pages/restaurant/RestaurantDashboard';
@@ -26,35 +30,28 @@ import RestaurantOrdersPage from './pages/restaurant/RestaurantOrdersPage';
 // Driver pages
 import DriverDashboard from './pages/driver/DriverDashboard';
 
-// Placeholder component for pages not yet built
-function Placeholder({ title }) {
-  return (
-    <div className="p-8 text-center text-2xl text-gray-500 min-h-[60vh] flex items-center justify-center">
-      {title} &mdash; Coming Soon
-    </div>
-  );
-}
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsersPage from './pages/admin/AdminUsersPage';
+import AdminRestaurantsPage from './pages/admin/AdminRestaurantsPage';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 
-const SearchPage = () => <Placeholder title="Search" />;
-const AboutPage = () => <Placeholder title="About" />;
-const ContactPage = () => <Placeholder title="Contact" />;
-const AdminDashboard = () => <Placeholder title="Admin Dashboard" />;
-const AdminUsersPage = () => <Placeholder title="Admin Users" />;
-const AdminRestaurantsPage = () => <Placeholder title="Admin Restaurants" />;
-const AdminOrdersPage = () => <Placeholder title="Admin Orders" />;
-
-const NotFoundPage = () => (
-  <div className="p-8 text-center min-h-[60vh] flex flex-col items-center justify-center">
-    <h1 className="text-6xl font-bold text-primary">404</h1>
-    <p className="text-xl text-gray-500 mt-2">Page not found</p>
-  </div>
-);
+// NotFound
+import NotFoundPage from './pages/NotFoundPage';
 
 function GuestRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return null;
   if (isAuthenticated) return <Navigate to="/" replace />;
   return children;
+}
+
+function AdminRoute({ children }) {
+  return (
+    <ProtectedRoute allowedTypes={['admin']}>
+      <AdminLayout>{children}</AdminLayout>
+    </ProtectedRoute>
+  );
 }
 
 export default function App() {
@@ -121,23 +118,11 @@ export default function App() {
           element={<ProtectedRoute allowedTypes={['delivery_driver']}><DriverDashboard /></ProtectedRoute>}
         />
 
-        {/* Admin only */}
-        <Route
-          path="/admin/dashboard"
-          element={<ProtectedRoute allowedTypes={['admin']}><AdminDashboard /></ProtectedRoute>}
-        />
-        <Route
-          path="/admin/users"
-          element={<ProtectedRoute allowedTypes={['admin']}><AdminUsersPage /></ProtectedRoute>}
-        />
-        <Route
-          path="/admin/restaurants"
-          element={<ProtectedRoute allowedTypes={['admin']}><AdminRestaurantsPage /></ProtectedRoute>}
-        />
-        <Route
-          path="/admin/orders"
-          element={<ProtectedRoute allowedTypes={['admin']}><AdminOrdersPage /></ProtectedRoute>}
-        />
+        {/* Admin only — wrapped in AdminLayout */}
+        <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        <Route path="/admin/users" element={<AdminRoute><AdminUsersPage /></AdminRoute>} />
+        <Route path="/admin/restaurants" element={<AdminRoute><AdminRestaurantsPage /></AdminRoute>} />
+        <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
 
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />

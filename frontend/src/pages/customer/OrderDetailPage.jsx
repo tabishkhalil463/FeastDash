@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FiArrowLeft, FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
+import { FiArrowLeft, FiPhone, FiMapPin, FiClock, FiX } from 'react-icons/fi';
+import { HiStar } from 'react-icons/hi2';
 import API, { mediaUrl } from '../../services/api';
 import StatusBadge from '../../components/common/StatusBadge';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
@@ -15,6 +16,14 @@ export default function OrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [cancelOpen, setCancelOpen] = useState(false);
 
+  // Review state
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewHover, setReviewHover] = useState(0);
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [hasReview, setHasReview] = useState(false);
+
   const fetchOrder = () => {
     API.get(`orders/${orderNumber}/`)
       .then(({ data }) => setOrder(data))
@@ -23,6 +32,19 @@ export default function OrderDetailPage() {
   };
 
   useEffect(() => { fetchOrder(); }, [orderNumber]);
+
+  // Check if review exists for this order
+  useEffect(() => {
+    if (order?.status === 'delivered' && order?.restaurant_slug) {
+      API.get(`restaurants/${order.restaurant_slug}/reviews/`)
+        .then(({ data }) => {
+          const results = data.results || [];
+          const found = results.some((r) => r.order_number === orderNumber);
+          setHasReview(found);
+        })
+        .catch(() => {});
+    }
+  }, [order, orderNumber]);
 
   const handleCancel = async () => {
     try {
@@ -33,6 +55,30 @@ export default function OrderDetailPage() {
       toast.error(err.response?.data?.error || 'Failed to cancel');
     }
     setCancelOpen(false);
+  };
+
+  const handleReviewSubmit = async () => {
+    if (reviewRating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+    setReviewSubmitting(true);
+    try {
+      await API.post(`restaurants/${order.restaurant_slug}/reviews/create/${orderNumber}/`, {
+        rating: reviewRating,
+        comment: reviewComment,
+      });
+      toast.success('Review submitted!');
+      setReviewModalOpen(false);
+      setHasReview(true);
+    } catch (err) {
+      const msg = err.response?.data?.non_field_errors?.[0]
+        || err.response?.data?.detail
+        || 'Failed to submit review';
+      toast.error(typeof msg === 'string' ? msg : JSON.stringify(msg));
+    } finally {
+      setReviewSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -53,6 +99,7 @@ export default function OrderDetailPage() {
 
   const canCancel = ['pending', 'confirmed'].includes(order.status);
   const isCancelled = order.status === 'cancelled';
+  const isDelivered = order.status === 'delivered';
   const currentStepIndex = STATUS_STEPS.indexOf(order.status);
 
   return (
@@ -173,6 +220,16 @@ export default function OrderDetailPage() {
         </div>
       )}
 
+      {/* Review Button */}
+      {isDelivered && !hasReview && (
+        <button
+          onClick={() => setReviewModalOpen(true)}
+          className="w-full py-3 bg-accent text-gray-900 rounded-xl font-medium hover:bg-accent/90 transition mb-4 flex items-center justify-center gap-2"
+        >
+          <HiStar size={18} /> Write a Review
+        </button>
+      )}
+
       {canCancel && (
         <button onClick={() => setCancelOpen(true)}
           className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl font-medium hover:bg-red-50 transition">
@@ -189,6 +246,57 @@ export default function OrderDetailPage() {
         onCancel={() => setCancelOpen(false)}
         onConfirm={handleCancel}
       />
+
+      {/* Review Modal */}
+      {reviewModalOpen && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 relative">
+            <button onClick={() => setReviewModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+              <FiX size={20} />
+            </button>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Write a Review</h3>
+            <p className="text-sm text-gray-500 mb-5">How was your experience with {order.restaurant_name}?</p>
+
+            {/* Star rating */}
+            <div className="flex items-center gap-1 mb-5">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => setReviewRating(star)}
+                  onMouseEnter={() => setReviewHover(star)}
+                  onMouseLeave={() => setReviewHover(0)}
+                  className="transition-transform hover:scale-110"
+                >
+                  <HiStar
+                    size={36}
+                    className={`transition ${
+                      star <= (reviewHover || reviewRating) ? 'text-yellow-400' : 'text-gray-200'
+                    }`}
+                  />
+                </button>
+              ))}
+              {reviewRating > 0 && <span className="ml-2 text-sm text-gray-500">{reviewRating}/5</span>}
+            </div>
+
+            {/* Comment */}
+            <textarea
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              placeholder="Share your experience (optional)"
+              rows={4}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 mb-5 text-sm"
+            />
+
+            <button
+              onClick={handleReviewSubmit}
+              disabled={reviewSubmitting || reviewRating === 0}
+              className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50"
+            >
+              {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
