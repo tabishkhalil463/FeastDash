@@ -117,6 +117,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '50/hour',
+        'user': '200/hour',
+        'auth': '10/minute',
+    },
 }
 
 # JWT
@@ -129,13 +138,6 @@ SIMPLE_JWT = {
 }
 
 # DRF Spectacular
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'FeastDash API',
-    'DESCRIPTION': 'Food delivery platform API',
-    'VERSION': '1.0.0',
-}
-
-# drf-spectacular
 SPECTACULAR_SETTINGS = {
     'TITLE': 'FeastDash API',
     'DESCRIPTION': 'Online food ordering and delivery platform for Pakistan',

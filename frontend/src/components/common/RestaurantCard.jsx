@@ -15,6 +15,7 @@ export default function RestaurantCard({ restaurant }) {
         <img
           src={mediaUrl(r.image) || `https://placehold.co/400x250/FF6B35/white?text=${encodeURIComponent(r.name)}`}
           alt={r.name}
+          loading="lazy"
           className="w-full h-full object-cover"
         />
       </div>

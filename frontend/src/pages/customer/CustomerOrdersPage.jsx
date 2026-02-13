@@ -89,7 +89,7 @@ export default function CustomerOrdersPage() {
                   <div className="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                     <img
                       src={mediaUrl(order.restaurant_image) || `https://placehold.co/80x80/f3f4f6/9ca3af?text=R`}
-                      alt="" className="w-full h-full object-cover"
+                      alt={order.restaurant_name} loading="lazy" className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="flex-1 min-w-0">

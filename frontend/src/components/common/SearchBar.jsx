@@ -50,6 +50,7 @@ export default function SearchBar({
         <button
           type="button"
           onClick={handleClear}
+          aria-label="Clear search"
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
         >
           <FiX size={18} />

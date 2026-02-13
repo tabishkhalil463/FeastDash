@@ -145,6 +145,7 @@ export default function HomePage() {
                   <img
                     src={cat.image || `https://placehold.co/160x160/f3f4f6/FF6B35?text=${encodeURIComponent(cat.name)}`}
                     alt={cat.name}
+                    loading="lazy"
                     className="w-full h-full object-cover"
                   />
                 </div>

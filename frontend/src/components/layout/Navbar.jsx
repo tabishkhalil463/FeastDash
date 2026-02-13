@@ -47,6 +47,18 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Escape key closes mobile menu & dropdown
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, []);
+
   const handleLogout = async () => {
     await logout();
     setDropdownOpen(false);
@@ -80,7 +92,7 @@ export default function Navbar() {
 
           {/* Desktop right side */}
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/search" className="text-gray-600 hover:text-primary transition">
+            <Link to="/search" className="text-gray-600 hover:text-primary transition" aria-label="Search">
               <FiSearch size={20} />
             </Link>
             {isAuthenticated ? (
@@ -88,6 +100,7 @@ export default function Navbar() {
                 {user?.user_type === 'customer' && (
                   <button
                     onClick={() => setCartOpen(true)}
+                    aria-label="Shopping cart"
                     className="relative text-gray-600 hover:text-primary transition"
                   >
                     <FiShoppingCart size={22} />
@@ -182,6 +195,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             className="md:hidden text-gray-600"
           >
             {mobileOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -202,7 +216,7 @@ export default function Navbar() {
                 <span className="text-primary">Feast</span>
                 <span className="text-secondary">Dash</span>
               </span>
-              <button onClick={() => setMobileOpen(false)}>
+              <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
                 <FiX size={24} className="text-gray-600" />
               </button>
             </div>

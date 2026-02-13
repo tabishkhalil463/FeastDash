@@ -479,7 +479,7 @@ export default function CheckoutPage() {
                     <div key={ci.id} className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                         <img src={mediaUrl(item.image) || `https://placehold.co/60x60/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
-                          alt="" className="w-full h-full object-cover" />
+                          alt={item.name} loading="lazy" className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>

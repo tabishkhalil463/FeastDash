@@ -33,7 +33,7 @@ class RestaurantListView(generics.ListAPIView):
     ordering = ['-average_rating']
 
     def get_queryset(self):
-        qs = Restaurant.objects.filter(is_active=True, is_approved=True)
+        qs = Restaurant.objects.filter(is_active=True, is_approved=True).select_related('owner')
         category = self.request.query_params.get('category')
         if category:
             qs = qs.filter(cuisine_type__icontains=category)
@@ -44,7 +44,13 @@ class RestaurantDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = RestaurantDetailSerializer
     lookup_field = 'slug'
-    queryset = Restaurant.objects.filter(is_active=True, is_approved=True)
+
+    def get_queryset(self):
+        return Restaurant.objects.filter(
+            is_active=True, is_approved=True
+        ).select_related('owner').prefetch_related(
+            'menu_categories__items'
+        )
 
 
 class RestaurantCreateView(generics.CreateAPIView):
@@ -86,7 +92,7 @@ class RestaurantOwnerDashboardView(APIView):
             return Response({'has_restaurant': False})
 
         from orders.models import Order
-        orders = Order.objects.filter(restaurant=restaurant)
+        orders = Order.objects.filter(restaurant=restaurant).select_related('user')
 
         total_orders = orders.count()
         total_revenue = orders.filter(status='delivered').aggregate(

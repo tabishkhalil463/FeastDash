@@ -146,7 +146,9 @@ class CustomerOrderListView(generics.ListAPIView):
     ordering = ['-created_at']
 
     def get_queryset(self):
-        qs = Order.objects.filter(user=self.request.user).order_by('-created_at')
+        qs = Order.objects.filter(user=self.request.user).select_related(
+            'restaurant', 'user', 'driver'
+        ).prefetch_related('items__menu_item').order_by('-created_at')
         s = self.request.query_params.get('status')
         if s:
             qs = qs.filter(status=s)
@@ -157,7 +159,10 @@ class CustomerOrderDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, order_number):
-        order = get_object_or_404(Order, order_number=order_number, user=request.user)
+        order = get_object_or_404(
+            Order.objects.select_related('restaurant', 'driver').prefetch_related('items__menu_item'),
+            order_number=order_number, user=request.user,
+        )
         return Response(OrderDetailSerializer(order).data)
 
 
@@ -184,6 +189,8 @@ class RestaurantOrderListView(generics.ListAPIView):
     def get_queryset(self):
         qs = Order.objects.filter(
             restaurant__owner=self.request.user
+        ).select_related('restaurant', 'user', 'driver').prefetch_related(
+            'items__menu_item'
         ).order_by('-created_at')
         s = self.request.query_params.get('status')
         if s:
@@ -216,7 +223,9 @@ class DriverAvailableOrdersView(generics.ListAPIView):
 
     def get_queryset(self):
         city = self.request.user.city
-        qs = Order.objects.filter(status='ready').order_by('-created_at')
+        qs = Order.objects.filter(status='ready').select_related(
+            'restaurant', 'user', 'driver'
+        ).prefetch_related('items__menu_item').order_by('-created_at')
         if city:
             qs = qs.filter(delivery_city__iexact=city)
         return qs
@@ -261,6 +270,8 @@ class DriverActiveOrderView(APIView):
     def get(self, request):
         order = Order.objects.filter(
             driver=request.user, status='picked_up',
+        ).select_related('restaurant', 'driver').prefetch_related(
+            'items__menu_item'
         ).order_by('-created_at').first()
         if order:
             return Response(OrderDetailSerializer(order).data)
@@ -274,4 +285,6 @@ class DriverOrderHistoryView(generics.ListAPIView):
     def get_queryset(self):
         return Order.objects.filter(
             driver=self.request.user, status='delivered',
+        ).select_related('restaurant', 'user', 'driver').prefetch_related(
+            'items__menu_item'
         ).order_by('-created_at')

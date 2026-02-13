@@ -24,6 +24,14 @@ export default function OrderDetailPage() {
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [hasReview, setHasReview] = useState(false);
 
+  // Escape key closes review modal
+  useEffect(() => {
+    if (!reviewModalOpen) return;
+    const handleKey = (e) => { if (e.key === 'Escape') setReviewModalOpen(false); };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [reviewModalOpen]);
+
   const fetchOrder = () => {
     API.get(`orders/${orderNumber}/`)
       .then(({ data }) => setOrder(data))
@@ -150,7 +158,7 @@ export default function OrderDetailPage() {
         <div className="flex items-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
             <img src={mediaUrl(order.restaurant_image) || 'https://placehold.co/80x80/f3f4f6/9ca3af?text=R'}
-              alt="" className="w-full h-full object-cover" />
+              alt={order.restaurant_name} loading="lazy" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="font-medium text-gray-900">{order.restaurant_name}</p>
@@ -181,7 +189,7 @@ export default function OrderDetailPage() {
             <div key={item.id} className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                 <img src={mediaUrl(item.menu_item_image) || 'https://placehold.co/60x60/f3f4f6/9ca3af?text=F'}
-                  alt="" className="w-full h-full object-cover" />
+                  alt={item.menu_item_name} loading="lazy" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">{item.menu_item_name}</p>
@@ -251,7 +259,7 @@ export default function OrderDetailPage() {
       {reviewModalOpen && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-md p-6 relative">
-            <button onClick={() => setReviewModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+            <button onClick={() => setReviewModalOpen(false)} aria-label="Close review modal" className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
               <FiX size={20} />
             </button>
             <h3 className="text-lg font-semibold text-gray-900 mb-1">Write a Review</h3>
@@ -265,6 +273,7 @@ export default function OrderDetailPage() {
                   onClick={() => setReviewRating(star)}
                   onMouseEnter={() => setReviewHover(star)}
                   onMouseLeave={() => setReviewHover(0)}
+                  aria-label={`Rate ${star} star${star !== 1 ? 's' : ''}`}
                   className="transition-transform hover:scale-110"
                 >
                   <HiStar

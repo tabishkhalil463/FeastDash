@@ -70,7 +70,7 @@ class MenuItemListCreateView(IsOwnerOrReadOnly, generics.ListCreateAPIView):
 
     def get_queryset(self):
         restaurant = self.get_restaurant()
-        return MenuItem.objects.filter(restaurant=restaurant)
+        return MenuItem.objects.filter(restaurant=restaurant).select_related('category')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

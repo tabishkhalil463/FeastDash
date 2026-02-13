@@ -20,8 +20,8 @@ class CreateReviewView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, slug, order_number):
-        restaurant = get_object_or_404(Restaurant, slug=slug)
-        order = get_object_or_404(Order, order_number=order_number)
+        restaurant = get_object_or_404(Restaurant.objects.select_related('owner'), slug=slug)
+        order = get_object_or_404(Order.objects.select_related('user', 'restaurant'), order_number=order_number)
 
         serializer = ReviewCreateSerializer(
             data=request.data,

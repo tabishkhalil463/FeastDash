@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -18,6 +18,13 @@ export default function AdminLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const handleKey = (e) => { if (e.key === 'Escape') setSidebarOpen(false); };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [sidebarOpen]);
 
   const handleLogout = async () => {
     await logout();
@@ -85,7 +92,7 @@ export default function AdminLayout({ children }) {
         <header className="sticky top-0 bg-white border-b border-gray-200 z-30">
           <div className="flex items-center justify-between px-4 sm:px-6 h-16">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-600">
+              <button onClick={() => setSidebarOpen(true)} aria-label="Open sidebar" className="lg:hidden text-gray-600">
                 <FiMenu size={22} />
               </button>
               <h1 className="text-lg font-semibold text-gray-900 hidden sm:block">FeastDash Admin</h1>

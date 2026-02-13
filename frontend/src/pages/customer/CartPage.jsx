@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiShoppingBag, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { mediaUrl } from '../../services/api';
 import { formatPrice } from '../../utils/currency';
 
 export default function CartPage() {
   const { items, restaurant, itemsCount, updateQuantity, removeItem, clearCart, getCartTotal } = useCart();
   const { subtotal, deliveryFee, tax, grandTotal } = getCartTotal();
+  const [clearOpen, setClearOpen] = useState(false);
 
   if (itemsCount === 0) {
     return (
@@ -34,7 +37,7 @@ export default function CartPage() {
             </p>
           )}
         </div>
-        <button onClick={clearCart} className="text-sm text-red-500 hover:text-red-600 font-medium flex items-center gap-1">
+        <button onClick={() => setClearOpen(true)} className="text-sm text-red-500 hover:text-red-600 font-medium flex items-center gap-1">
           <FiTrash2 size={14} /> Clear Cart
         </button>
       </div>
@@ -50,7 +53,7 @@ export default function CartPage() {
                 <div className="w-20 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                   <img
                     src={mediaUrl(item.image) || `https://placehold.co/100x100/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
-                    alt="" className="w-full h-full object-cover"
+                    alt={item.name} loading="lazy" className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -59,7 +62,7 @@ export default function CartPage() {
                       <h3 className="font-medium text-gray-900">{item.name}</h3>
                       <p className="text-primary font-medium text-sm">{formatPrice(price)}</p>
                     </div>
-                    <button onClick={() => removeItem(ci.id)} className="text-gray-400 hover:text-red-500 p-1">
+                    <button onClick={() => removeItem(ci.id)} aria-label="Remove item" className="text-gray-400 hover:text-red-500 p-1">
                       <FiTrash2 size={16} />
                     </button>
                   </div>
@@ -67,12 +70,12 @@ export default function CartPage() {
                     <p className="text-xs text-gray-400 mt-1 truncate">{ci.special_instructions}</p>
                   )}
                   <div className="flex items-center gap-3 mt-3">
-                    <button onClick={() => updateQuantity(ci.id, ci.quantity - 1)}
+                    <button onClick={() => updateQuantity(ci.id, ci.quantity - 1)} aria-label="Decrease quantity"
                       className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50">
                       -
                     </button>
                     <span className="font-medium text-gray-900 w-6 text-center">{ci.quantity}</span>
-                    <button onClick={() => updateQuantity(ci.id, ci.quantity + 1)}
+                    <button onClick={() => updateQuantity(ci.id, ci.quantity + 1)} aria-label="Increase quantity"
                       className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary/90">
                       +
                     </button>
@@ -117,6 +120,16 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={clearOpen}
+        title="Clear Cart?"
+        message="Are you sure you want to remove all items from your cart?"
+        confirmLabel="Clear Cart"
+        confirmColor="bg-red-500"
+        onCancel={() => setClearOpen(false)}
+        onConfirm={() => { clearCart(); setClearOpen(false); }}
+      />
     </div>
   );
 }

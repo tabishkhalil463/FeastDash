@@ -1,5 +1,6 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
+import BackToTop from '../common/BackToTop';
 
 export default function Layout({ children }) {
   return (
@@ -7,6 +8,7 @@ export default function Layout({ children }) {
       <Navbar />
       <main className="flex-1 pt-16">{children}</main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import {
 } from 'react-icons/fi';
 import API, { mediaUrl } from '../../services/api';
 import ImageUpload from '../../components/common/ImageUpload';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 import EmptyState from '../../components/common/EmptyState';
 import { formatPrice } from '../../utils/currency';
 import toast from 'react-hot-toast';
@@ -13,6 +14,7 @@ export default function MenuManagementPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState({});
+  const [deleteTarget, setDeleteTarget] = useState(null); // { type: 'category'|'item', data }
 
   // Category modal
   const [catModal, setCatModal] = useState(false);
@@ -83,7 +85,6 @@ export default function MenuManagementPage() {
   };
 
   const deleteCat = async (cat) => {
-    if (!confirm(`Delete category "${cat.name}"? All items in it will also be deleted.`)) return;
     try {
       await API.delete(`restaurants/${restaurant.slug}/categories/${cat.id}/`);
       toast.success('Category deleted');
@@ -148,7 +149,6 @@ export default function MenuManagementPage() {
   };
 
   const deleteItem = async (item) => {
-    if (!confirm(`Delete "${item.name}"?`)) return;
     try {
       await API.delete(`restaurants/${restaurant.slug}/menu/${item.slug}/`);
       toast.success('Item deleted');
@@ -156,6 +156,16 @@ export default function MenuManagementPage() {
     } catch {
       toast.error('Failed to delete item');
     }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    if (deleteTarget.type === 'category') {
+      await deleteCat(deleteTarget.data);
+    } else {
+      await deleteItem(deleteTarget.data);
+    }
+    setDeleteTarget(null);
   };
 
   const toggleAvailability = async (item) => {
@@ -224,8 +234,8 @@ export default function MenuManagementPage() {
                     <span className="text-xs text-gray-400">{cat.items_count ?? items.length} items</span>
                   </div>
                   <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                    <button onClick={() => openCatModal(cat)} className="p-1.5 text-gray-400 hover:text-primary"><FiEdit2 size={16} /></button>
-                    <button onClick={() => deleteCat(cat)} className="p-1.5 text-gray-400 hover:text-red-500"><FiTrash2 size={16} /></button>
+                    <button onClick={() => openCatModal(cat)} aria-label="Edit category" className="p-1.5 text-gray-400 hover:text-primary"><FiEdit2 size={16} /></button>
+                    <button onClick={() => setDeleteTarget({ type: 'category', data: cat })} aria-label="Delete category" className="p-1.5 text-gray-400 hover:text-red-500"><FiTrash2 size={16} /></button>
                   </div>
                 </div>
 
@@ -240,7 +250,7 @@ export default function MenuManagementPage() {
                             <div className="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                               <img
                                 src={mediaUrl(item.image) || `https://placehold.co/100x100/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
-                                alt="" className="w-full h-full object-cover" />
+                                alt={item.name} loading="lazy" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-sm text-gray-900 truncate">{item.name}</p>
@@ -248,12 +258,12 @@ export default function MenuManagementPage() {
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
                               {/* Availability toggle */}
-                              <button onClick={() => toggleAvailability(item)}
+                              <button onClick={() => toggleAvailability(item)} aria-label={item.is_available ? 'Mark unavailable' : 'Mark available'}
                                 className={`w-10 h-6 rounded-full relative transition ${item.is_available ? 'bg-green-500' : 'bg-gray-300'}`}>
                                 <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${item.is_available ? 'left-[18px]' : 'left-0.5'}`} />
                               </button>
-                              <button onClick={() => openItemModal(cat.id, item)} className="p-1.5 text-gray-400 hover:text-primary"><FiEdit2 size={14} /></button>
-                              <button onClick={() => deleteItem(item)} className="p-1.5 text-gray-400 hover:text-red-500"><FiTrash2 size={14} /></button>
+                              <button onClick={() => openItemModal(cat.id, item)} aria-label="Edit item" className="p-1.5 text-gray-400 hover:text-primary"><FiEdit2 size={14} /></button>
+                              <button onClick={() => setDeleteTarget({ type: 'item', data: item })} aria-label="Delete item" className="p-1.5 text-gray-400 hover:text-red-500"><FiTrash2 size={14} /></button>
                             </div>
                           </div>
                         ))}
@@ -279,7 +289,7 @@ export default function MenuManagementPage() {
           <div className="bg-white rounded-2xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">{editingCat ? 'Edit Category' : 'Add Category'}</h2>
-              <button onClick={() => setCatModal(false)}><FiX size={20} className="text-gray-400" /></button>
+              <button onClick={() => setCatModal(false)} aria-label="Close modal"><FiX size={20} className="text-gray-400" /></button>
             </div>
             <form onSubmit={saveCat} className="space-y-4">
               <div>
@@ -306,13 +316,26 @@ export default function MenuManagementPage() {
         </div>
       )}
 
+      {/* Delete Confirm Dialog */}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title={deleteTarget?.type === 'category' ? 'Delete Category?' : 'Delete Item?'}
+        message={deleteTarget?.type === 'category'
+          ? `Delete "${deleteTarget?.data?.name}"? All items in this category will also be deleted.`
+          : `Delete "${deleteTarget?.data?.name}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        confirmColor="bg-red-500"
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+      />
+
       {/* Item Modal */}
       {itemModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">{editingItem ? 'Edit Item' : 'Add Item'}</h2>
-              <button onClick={() => setItemModal(false)}><FiX size={20} className="text-gray-400" /></button>
+              <button onClick={() => setItemModal(false)} aria-label="Close modal"><FiX size={20} className="text-gray-400" /></button>
             </div>
             <form onSubmit={saveItem} className="space-y-4">
               <div>
@@ -378,7 +401,7 @@ export default function MenuManagementPage() {
                   {itemSaving ? 'Saving...' : 'Save'}
                 </button>
                 {editingItem && (
-                  <button type="button" onClick={() => { setItemModal(false); deleteItem(editingItem); }}
+                  <button type="button" onClick={() => { setItemModal(false); setDeleteTarget({ type: 'item', data: editingItem }); }}
                     className="px-5 py-2.5 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition">
                     Delete
                   </button>

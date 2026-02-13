@@ -63,10 +63,11 @@ export default function SearchPage() {
             value={query}
             onChange={(e) => handleChange(e.target.value)}
             placeholder="Search restaurants, dishes..."
+            aria-label="Search restaurants and dishes"
             className="w-full pl-12 pr-10 py-4 text-lg border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
           />
           {query && (
-            <button onClick={() => { setQuery(''); doSearch(''); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            <button onClick={() => { setQuery(''); doSearch(''); }} aria-label="Clear search" className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
               <FiX size={20} />
             </button>
           )}
@@ -135,7 +136,7 @@ export default function SearchPage() {
                         <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                           <img
                             src={mediaUrl(item.image) || `https://placehold.co/80x80/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
-                            alt="" className="w-full h-full object-cover"
+                            alt={item.name} loading="lazy" className="w-full h-full object-cover"
                           />
                         </div>
                         <div className="flex-1 min-w-0">

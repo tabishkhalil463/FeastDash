@@ -126,6 +126,7 @@ export default function RestaurantDetailPage() {
           alt={r.name}
           className="w-full h-full object-cover"
         />
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
 
@@ -135,7 +136,8 @@ export default function RestaurantDetailPage() {
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow shrink-0 -mt-14 sm:-mt-16">
             <img
               src={mediaUrl(r.logo) || `https://placehold.co/200x200/004E89/white?text=${encodeURIComponent(r.name[0])}`}
-              alt=""
+              alt={r.name}
+              loading="lazy"
               className="w-full h-full object-cover"
             />
           </div>

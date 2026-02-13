@@ -4,6 +4,7 @@ import { mediaUrl } from '../../services/api';
 import toast from 'react-hot-toast';
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default function ImageUpload({ label, currentImage, onSelect, className = '' }) {
   const inputRef = useRef();
@@ -13,8 +14,8 @@ export default function ImageUpload({ label, currentImage, onSelect, className =
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file.');
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      toast.error('Only JPEG, PNG, and WebP images are allowed.');
       return;
     }
     if (file.size > MAX_SIZE) {
@@ -49,6 +50,7 @@ export default function ImageUpload({ label, currentImage, onSelect, className =
           <button
             type="button"
             onClick={handleClear}
+            aria-label="Remove image"
             className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600"
           >
             <FiX size={14} />
@@ -67,7 +69,7 @@ export default function ImageUpload({ label, currentImage, onSelect, className =
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp"
         className="hidden"
         onChange={handleFile}
       />

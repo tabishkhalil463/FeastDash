@@ -1,12 +1,22 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiX, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
+import ConfirmDialog from '../common/ConfirmDialog';
 import { mediaUrl } from '../../services/api';
 import { formatPrice } from '../../utils/currency';
 
 export default function CartDrawer({ open, onClose }) {
   const { items, restaurant, itemsCount, updateQuantity, removeItem, clearCart, getCartTotal } = useCart();
   const { subtotal, deliveryFee, tax, grandTotal } = getCartTotal();
+  const [clearOpen, setClearOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -17,7 +27,7 @@ export default function CartDrawer({ open, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">Your Cart</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} aria-label="Close cart" className="text-gray-400 hover:text-gray-600">
             <FiX size={22} />
           </button>
         </div>
@@ -54,7 +64,7 @@ export default function CartDrawer({ open, onClose }) {
                       <div className="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                         <img
                           src={mediaUrl(item.image) || `https://placehold.co/100x100/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
-                          alt="" className="w-full h-full object-cover"
+                          alt={item.name} loading="lazy" className="w-full h-full object-cover"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -64,16 +74,17 @@ export default function CartDrawer({ open, onClose }) {
                           <p className="text-xs text-gray-400 mt-0.5 truncate">{ci.special_instructions}</p>
                         )}
                         <div className="flex items-center gap-2 mt-1.5">
-                          <button onClick={() => updateQuantity(ci.id, ci.quantity - 1)}
+                          <button onClick={() => updateQuantity(ci.id, ci.quantity - 1)} aria-label="Decrease quantity"
                             className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-sm">
                             -
                           </button>
                           <span className="w-5 text-center text-sm font-medium">{ci.quantity}</span>
-                          <button onClick={() => updateQuantity(ci.id, ci.quantity + 1)}
+                          <button onClick={() => updateQuantity(ci.id, ci.quantity + 1)} aria-label="Increase quantity"
                             className="w-7 h-7 rounded bg-primary text-white flex items-center justify-center hover:bg-primary/90 text-sm">
                             +
                           </button>
                           <button onClick={() => removeItem(ci.id)}
+                            aria-label="Remove item"
                             className="ml-auto text-gray-400 hover:text-red-500">
                             <FiTrash2 size={14} />
                           </button>
@@ -103,7 +114,7 @@ export default function CartDrawer({ open, onClose }) {
                 className="block w-full text-center bg-primary hover:bg-primary/90 text-white py-2.5 rounded-lg font-medium transition mt-2">
                 Proceed to Checkout
               </Link>
-              <button onClick={clearCart}
+              <button onClick={() => setClearOpen(true)}
                 className="w-full text-center text-sm text-red-500 hover:text-red-600 mt-1">
                 Clear Cart
               </button>
@@ -111,6 +122,16 @@ export default function CartDrawer({ open, onClose }) {
           </>
         )}
       </div>
+
+      <ConfirmDialog
+        open={clearOpen}
+        title="Clear Cart?"
+        message="Are you sure you want to remove all items from your cart?"
+        confirmLabel="Clear Cart"
+        confirmColor="bg-red-500"
+        onCancel={() => setClearOpen(false)}
+        onConfirm={() => { clearCart(); setClearOpen(false); }}
+      />
     </>
   );
 }

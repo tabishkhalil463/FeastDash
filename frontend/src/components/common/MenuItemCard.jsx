@@ -9,6 +9,7 @@ export default function MenuItemCard({ item, onAddToCart, cartQty = 0, onIncreas
         <img
           src={mediaUrl(item.image) || `https://placehold.co/200x200/f3f4f6/9ca3af?text=${encodeURIComponent(item.name)}`}
           alt={item.name}
+          loading="lazy"
           className="w-full h-full object-cover"
         />
       </div>
@@ -58,14 +59,16 @@ export default function MenuItemCard({ item, onAddToCart, cartQty = 0, onIncreas
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onDecrease?.(item)}
-                className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"
+                aria-label="Decrease quantity"
+                className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition"
               >
                 -
               </button>
               <span className="w-6 text-center font-medium">{cartQty}</span>
               <button
                 onClick={() => onIncrease?.(item)}
-                className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary/90"
+                aria-label="Increase quantity"
+                className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition"
               >
                 +
               </button>
