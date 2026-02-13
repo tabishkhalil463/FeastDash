@@ -37,14 +37,14 @@ export default function SearchBar({
 
   return (
     <div className={`relative ${className}`}>
-      <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+      <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
       <input
         type="text"
         value={local}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white"
+        className="w-full pl-10 pr-10 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-card-dark dark:text-white dark:placeholder-gray-500"
       />
       {local && (
         <button

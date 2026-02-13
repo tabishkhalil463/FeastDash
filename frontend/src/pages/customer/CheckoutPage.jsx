@@ -188,11 +188,11 @@ export default function CheckoutPage() {
   // Processing overlay
   if (processing) {
     return (
-      <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-white/80 dark:bg-surface-dark/80 z-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-lg font-medium text-gray-900">{PROCESSING_MESSAGES[form.payment_method]}</p>
-          <p className="text-sm text-gray-500 mt-1">Please don't close this page</p>
+          <div className="w-16 h-16 border-4 border-primary-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-lg font-medium text-gray-900 dark:text-white">{PROCESSING_MESSAGES[form.payment_method]}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Please don&apos;t close this page</p>
         </div>
       </div>
     );
@@ -202,20 +202,20 @@ export default function CheckoutPage() {
   if (orderResult?.success) {
     return (
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <FiCheck size={40} className="text-green-600" />
+        <div className="w-20 h-20 bg-green-100 dark:bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <FiCheck size={40} className="text-green-600 dark:text-green-400" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Placed Successfully!</h2>
-        <p className="text-gray-500 mb-1">Your order number is</p>
-        <p className="text-xl font-mono font-bold text-primary mb-2">{orderResult.orderNumber}</p>
-        <p className="text-sm text-gray-400 mb-8">Estimated delivery: 30-45 minutes</p>
+        <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-2">Order Placed Successfully!</h2>
+        <p className="text-gray-500 dark:text-gray-400 mb-1">Your order number is</p>
+        <p className="text-xl font-mono font-bold text-primary-accent mb-2">{orderResult.orderNumber}</p>
+        <p className="text-sm text-gray-400 dark:text-gray-500 mb-8">Estimated delivery: 30-45 minutes</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to={`/orders/${orderResult.orderNumber}`}
-            className="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition">
+            className="px-6 py-3 gradient-accent text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
             Track Order
           </Link>
           <Link to="/"
-            className="px-6 py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition">
+            className="px-6 py-3 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition">
             Back to Home
           </Link>
         </div>
@@ -234,7 +234,7 @@ export default function CheckoutPage() {
         <p className="text-gray-500 mb-8">{orderResult.error}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button onClick={() => { setOrderResult(null); setStep(1); }}
-            className="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition">
+            className="px-6 py-3 gradient-accent text-white rounded-lg font-medium hover:bg-primary/90 transition">
             Try Again
           </button>
           <button onClick={() => { update('payment_method', 'cod'); setOrderResult(null); setStep(2); }}
@@ -252,7 +252,7 @@ export default function CheckoutPage() {
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Cart is empty</h2>
         <p className="text-gray-500 mb-6">Add items before checking out.</p>
-        <Link to="/restaurants" className="px-6 py-3 bg-primary text-white rounded-lg font-medium">
+        <Link to="/restaurants" className="px-6 py-3 gradient-accent text-white rounded-lg font-medium">
           Browse Restaurants
         </Link>
       </div>
@@ -273,7 +273,7 @@ export default function CheckoutPage() {
         {STEPS.map((s, i) => (
           <div key={s} className="flex items-center gap-2 flex-1">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium shrink-0 ${
-              i < step ? 'bg-green-500 text-white' : i === step ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'
+              i < step ? 'bg-green-500 text-white' : i === step ? 'gradient-accent text-white' : 'bg-gray-200 text-gray-500'
             }`}>
               {i < step ? <FiCheck size={16} /> : i + 1}
             </div>
@@ -288,9 +288,9 @@ export default function CheckoutPage() {
         <div className="lg:col-span-2">
           {/* Step 0: Delivery */}
           {step === 0 && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6">
+            <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                <FiMapPin className="text-primary" /> Delivery Details
+                <FiMapPin className="text-primary-accent" /> Delivery Details
               </h2>
               <div className="space-y-4">
                 <div>
@@ -343,9 +343,9 @@ export default function CheckoutPage() {
 
           {/* Step 1: Payment */}
           {step === 1 && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6">
+            <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                <FiCreditCard className="text-primary" /> Choose Payment Method
+                <FiCreditCard className="text-primary-accent" /> Choose Payment Method
               </h2>
               <div className="space-y-3">
                 {PAYMENT_METHODS.map((pm) => {
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
                       <label
                         className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition ${
                           form.payment_method === pm.value
-                            ? 'border-primary bg-primary/5'
+                            ? 'border-primary-accent bg-primary-accent/5'
                             : 'border-gray-100 hover:border-gray-200'
                         }`}
                       >
@@ -377,7 +377,7 @@ export default function CheckoutPage() {
                           <p className="text-sm text-gray-500">{pm.desc}</p>
                         </div>
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          form.payment_method === pm.value ? 'border-primary' : 'border-gray-300'
+                          form.payment_method === pm.value ? 'border-primary-accent' : 'border-gray-300'
                         }`}>
                           {form.payment_method === pm.value && (
                             <div className="w-2.5 h-2.5 bg-primary rounded-full" />
@@ -460,9 +460,9 @@ export default function CheckoutPage() {
 
           {/* Step 2: Review */}
           {step === 2 && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6">
+            <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                <FiFileText className="text-primary" /> Review Your Order
+                <FiFileText className="text-primary-accent" /> Review Your Order
               </h2>
               {/* Restaurant */}
               {restaurant && (
@@ -531,7 +531,7 @@ export default function CheckoutPage() {
             ) : <div />}
             {step < 2 ? (
               <button onClick={nextStep}
-                className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition">
+                className="px-6 py-2.5 gradient-accent text-white rounded-lg font-medium hover:bg-primary/90 transition">
                 {step === 0 ? 'Continue to Payment' : 'Review Order'}
               </button>
             ) : (
@@ -545,7 +545,7 @@ export default function CheckoutPage() {
 
         {/* Order summary sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white border border-gray-100 rounded-xl p-5 sticky top-20">
+          <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-5 sticky top-20">
             <h3 className="font-semibold text-gray-900 mb-1">Order Summary</h3>
             {restaurant && (
               <p className="text-sm text-gray-500 mb-4">From {restaurant.name}</p>

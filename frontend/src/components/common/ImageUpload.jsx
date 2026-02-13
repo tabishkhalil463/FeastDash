@@ -36,7 +36,7 @@ export default function ImageUpload({ label, currentImage, onSelect, className =
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           {label}
         </label>
       )}
@@ -45,7 +45,7 @@ export default function ImageUpload({ label, currentImage, onSelect, className =
           <img
             src={preview}
             alt="Preview"
-            className="w-32 h-32 object-cover rounded-lg border border-gray-200"
+            className="w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-white/10"
           />
           <button
             type="button"
@@ -60,7 +60,7 @@ export default function ImageUpload({ label, currentImage, onSelect, className =
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:border-primary hover:text-primary transition"
+          className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500 hover:border-primary-accent hover:text-primary-accent transition"
         >
           <FiUploadCloud size={24} />
           <span className="text-xs">Upload</span>

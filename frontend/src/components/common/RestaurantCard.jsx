@@ -9,43 +9,45 @@ export default function RestaurantCard({ restaurant }) {
   return (
     <Link
       to={`/restaurants/${r.slug}`}
-      className="block bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
+      className="group block bg-white dark:bg-surface-card-dark rounded-2xl border border-gray-100 dark:border-white/5 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
     >
-      <div className="h-44 bg-gray-100 overflow-hidden">
+      <div className="h-48 bg-gray-100 dark:bg-surface-dark overflow-hidden relative">
         <img
-          src={mediaUrl(r.image) || `https://placehold.co/400x250/FF6B35/white?text=${encodeURIComponent(r.name)}`}
+          src={mediaUrl(r.image) || `https://placehold.co/400x250/4A1982/white?text=${encodeURIComponent(r.name)}`}
           alt={r.name}
           loading="lazy"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-      </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 truncate">{r.name}</h3>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         {r.cuisine_type && (
-          <span className="inline-block text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full mt-1">
+          <span className="absolute top-3 left-3 text-xs font-semibold bg-white/90 dark:bg-surface-card-dark/90 text-primary-mid dark:text-primary-accent px-3 py-1 rounded-full backdrop-blur-sm">
             {r.cuisine_type}
           </span>
         )}
-        <div className="mt-2">
-          <StarRating
-            rating={r.average_rating}
-            reviews={r.total_reviews}
-            size={14}
-          />
+        <div className="absolute bottom-3 left-3">
+          <h3 className="font-heading font-semibold text-white text-lg drop-shadow-md truncate max-w-[200px]">
+            {r.name}
+          </h3>
         </div>
-        <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-          <span className="flex items-center gap-1">
-            <FiClock size={14} /> {r.estimated_delivery_time} min
+      </div>
+      <div className="p-4">
+        <div className="flex items-center justify-between">
+          <StarRating rating={r.average_rating} reviews={r.total_reviews} size={14} />
+          {r.minimum_order > 0 && (
+            <span className="text-xs text-gray-400 dark:text-gray-500">
+              Min. {formatPrice(r.minimum_order)}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
+          <span className="flex items-center gap-1.5">
+            <FiClock size={14} className="text-primary-accent" /> {r.estimated_delivery_time} min
           </span>
-          <span className="flex items-center gap-1">
-            <FiTruck size={14} /> {formatPrice(r.delivery_fee)}
+          <span className="flex items-center gap-1.5">
+            <FiTruck size={14} className="text-primary-accent" /> {formatPrice(r.delivery_fee)}
           </span>
         </div>
-        {r.minimum_order > 0 && (
-          <p className="text-xs text-gray-400 mt-2">
-            Min. order: {formatPrice(r.minimum_order)}
-          </p>
-        )}
       </div>
     </Link>
   );

@@ -100,26 +100,26 @@ export default function ProfilePage() {
   if (profileLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <span className="h-8 w-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+        <span className="h-8 w-8 border-4 border-primary-accent/30 border-t-primary-accent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">My Profile</h1>
+      <h1 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-8">My Profile</h1>
 
       {/* Profile Form */}
       <form
         onSubmit={handleProfileSubmit}
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8"
+        className="bg-white dark:bg-surface-card-dark rounded-2xl shadow-xl border border-gray-100 dark:border-white/10 p-6 mb-8"
       >
         {/* Avatar */}
         <div className="flex items-center gap-4 mb-6">
           <button
             type="button"
             style={{ width: 80, height: 80 }}
-            className="relative shrink-0 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer"
+            className="relative shrink-0 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center overflow-hidden cursor-pointer"
             onClick={() => fileRef.current?.click()}
             onMouseEnter={() => setAvatarHover(true)}
             onMouseLeave={() => setAvatarHover(false)}
@@ -131,7 +131,7 @@ export default function ProfilePage() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <FiUser size={32} className="text-gray-400" />
+              <FiUser size={32} className="text-gray-400 dark:text-gray-500" />
             )}
             <div
               className="absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity"
@@ -141,10 +141,10 @@ export default function ProfilePage() {
             </div>
           </button>
           <div>
-            <p className="font-medium text-gray-900">
+            <p className="font-medium text-gray-900 dark:text-white">
               {profile.first_name} {profile.last_name}
             </p>
-            <p className="text-sm text-gray-500">{user?.user_type?.replace('_', ' ')}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{user?.user_type?.replace('_', ' ')}</p>
           </div>
           <input
             ref={fileRef}
@@ -157,7 +157,7 @@ export default function ProfilePage() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               First Name
             </label>
             <input
@@ -166,11 +166,11 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setProfile({ ...profile, first_name: e.target.value })
               }
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Last Name
             </label>
             <input
@@ -179,22 +179,22 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setProfile({ ...profile, last_name: e.target.value })
               }
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Email
             </label>
             <input
               type="email"
               value={profile.email}
               readOnly
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-surface-dark text-gray-500 dark:text-gray-400 cursor-not-allowed"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Phone
             </label>
             <input
@@ -204,11 +204,11 @@ export default function ProfilePage() {
                 setProfile({ ...profile, phone: e.target.value })
               }
               placeholder="03XXXXXXXXX"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white dark:placeholder-gray-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               City
             </label>
             <input
@@ -217,11 +217,11 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setProfile({ ...profile, city: e.target.value })
               }
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Address
             </label>
             <textarea
@@ -230,7 +230,7 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setProfile({ ...profile, address: e.target.value })
               }
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white resize-none"
             />
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function ProfilePage() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg font-medium transition disabled:opacity-60"
+          className="mt-6 flex items-center gap-2 gradient-accent text-white px-6 py-2.5 rounded-xl font-medium transition shadow-lg hover:shadow-xl hover:opacity-90 disabled:opacity-60"
         >
           {loading ? (
             <span className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -253,14 +253,14 @@ export default function ProfilePage() {
       {/* Change Password */}
       <form
         onSubmit={handlePasswordSubmit}
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+        className="bg-white dark:bg-surface-card-dark rounded-2xl shadow-xl border border-gray-100 dark:border-white/10 p-6"
       >
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="text-lg font-heading font-semibold text-gray-900 dark:text-white mb-4">
           Change Password
         </h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Current Password
             </label>
             <input
@@ -269,11 +269,11 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setPasswords({ ...passwords, old_password: e.target.value })
               }
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               New Password
             </label>
             <input
@@ -283,11 +283,11 @@ export default function ProfilePage() {
                 setPasswords({ ...passwords, new_password: e.target.value })
               }
               placeholder="Min 8 characters"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white dark:placeholder-gray-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Confirm New Password
             </label>
             <input
@@ -299,14 +299,14 @@ export default function ProfilePage() {
                   confirm_new_password: e.target.value,
                 })
               }
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-accent/50 bg-white dark:bg-surface-dark dark:text-white"
             />
           </div>
         </div>
         <button
           type="submit"
           disabled={pwLoading}
-          className="mt-6 flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-white px-6 py-2.5 rounded-lg font-medium transition disabled:opacity-60"
+          className="mt-6 flex items-center gap-2 gradient-primary text-white px-6 py-2.5 rounded-xl font-medium transition shadow-lg hover:shadow-xl hover:opacity-90 disabled:opacity-60"
         >
           {pwLoading ? (
             <span className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

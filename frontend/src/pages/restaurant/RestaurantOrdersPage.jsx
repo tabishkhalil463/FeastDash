@@ -103,7 +103,7 @@ export default function RestaurantOrdersPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
         <button onClick={() => fetchOrders(false)}
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-primary transition">
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-primary-accent transition">
           <FiRefreshCw size={14} /> Refresh
         </button>
       </div>
@@ -113,7 +113,7 @@ export default function RestaurantOrdersPage() {
         {TABS.map((t) => (
           <button key={t.value} onClick={() => setTab(t.value)}
             className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-1.5 ${
-              tab === t.value ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              tab === t.value ? 'gradient-accent text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}>
             {t.label}
             {counts[t.value] > 0 && (

@@ -124,7 +124,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '50/hour',
         'user': '200/hour',
-        'auth': '10/minute',
+        'auth': '100/minute',
     },
 }
 
@@ -136,6 +136,11 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# Email (console backend for dev, swap to SMTP in production)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@feastdash.pk'
+CONTACT_EMAIL = 'tabishkhalil64@gmail.com'
 
 # DRF Spectacular
 SPECTACULAR_SETTINGS = {

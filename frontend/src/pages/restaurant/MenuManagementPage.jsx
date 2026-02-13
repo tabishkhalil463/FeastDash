@@ -206,7 +206,7 @@ export default function MenuManagementPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Menu Management</h1>
         <button onClick={() => openCatModal()}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition">
+          className="flex items-center gap-2 px-4 py-2 gradient-accent text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition">
           <FiPlus size={16} /> Add Category
         </button>
       </div>
@@ -234,7 +234,7 @@ export default function MenuManagementPage() {
                     <span className="text-xs text-gray-400">{cat.items_count ?? items.length} items</span>
                   </div>
                   <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                    <button onClick={() => openCatModal(cat)} aria-label="Edit category" className="p-1.5 text-gray-400 hover:text-primary"><FiEdit2 size={16} /></button>
+                    <button onClick={() => openCatModal(cat)} aria-label="Edit category" className="p-1.5 text-gray-400 hover:text-primary-accent"><FiEdit2 size={16} /></button>
                     <button onClick={() => setDeleteTarget({ type: 'category', data: cat })} aria-label="Delete category" className="p-1.5 text-gray-400 hover:text-red-500"><FiTrash2 size={16} /></button>
                   </div>
                 </div>
@@ -254,7 +254,7 @@ export default function MenuManagementPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-sm text-gray-900 truncate">{item.name}</p>
-                              <p className="text-sm text-primary font-medium">{formatPrice(item.price)}</p>
+                              <p className="text-sm text-primary-accent font-medium">{formatPrice(item.price)}</p>
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
                               {/* Availability toggle */}
@@ -262,7 +262,7 @@ export default function MenuManagementPage() {
                                 className={`w-10 h-6 rounded-full relative transition ${item.is_available ? 'bg-green-500' : 'bg-gray-300'}`}>
                                 <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${item.is_available ? 'left-[18px]' : 'left-0.5'}`} />
                               </button>
-                              <button onClick={() => openItemModal(cat.id, item)} aria-label="Edit item" className="p-1.5 text-gray-400 hover:text-primary"><FiEdit2 size={14} /></button>
+                              <button onClick={() => openItemModal(cat.id, item)} aria-label="Edit item" className="p-1.5 text-gray-400 hover:text-primary-accent"><FiEdit2 size={14} /></button>
                               <button onClick={() => setDeleteTarget({ type: 'item', data: item })} aria-label="Delete item" className="p-1.5 text-gray-400 hover:text-red-500"><FiTrash2 size={14} /></button>
                             </div>
                           </div>
@@ -272,7 +272,7 @@ export default function MenuManagementPage() {
                       <p className="text-sm text-gray-400 mt-4">No items in this category yet.</p>
                     )}
                     <button onClick={() => openItemModal(cat.id)}
-                      className="flex items-center gap-1 mt-4 text-sm text-primary font-medium hover:underline">
+                      className="flex items-center gap-1 mt-4 text-sm text-primary-accent font-medium hover:underline">
                       <FiPlus size={14} /> Add Item
                     </button>
                   </div>
@@ -295,20 +295,20 @@ export default function MenuManagementPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                 <input value={catForm.name} onChange={(e) => setCatForm({ ...catForm, name: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <input value={catForm.description} onChange={(e) => setCatForm({ ...catForm, description: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Sort Order</label>
                 <input type="number" value={catForm.sort_order} onChange={(e) => setCatForm({ ...catForm, sort_order: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
               </div>
               <button type="submit" disabled={catSaving}
-                className="w-full bg-primary text-white py-2.5 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-60">
+                className="w-full gradient-accent text-white py-2.5 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-60">
                 {catSaving ? 'Saving...' : 'Save'}
               </button>
             </form>
@@ -341,31 +341,31 @@ export default function MenuManagementPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                 <input value={itemForm.name} onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea value={itemForm.description} onChange={(e) => setItemForm({ ...itemForm, description: e.target.value })} rows={2}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none" />
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50 resize-none" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Price (Rs.)</label>
                   <input type="number" step="0.01" value={itemForm.price} onChange={(e) => setItemForm({ ...itemForm, price: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Discounted Price</label>
                   <input type="number" step="0.01" value={itemForm.discounted_price}
                     onChange={(e) => setItemForm({ ...itemForm, discounted_price: e.target.value })} placeholder="Optional"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                   <select value={itemForm.category} onChange={(e) => setItemForm({ ...itemForm, category: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-accent/50">
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>
@@ -373,7 +373,7 @@ export default function MenuManagementPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Prep Time (min)</label>
                   <input type="number" value={itemForm.preparation_time}
                     onChange={(e) => setItemForm({ ...itemForm, preparation_time: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
                 </div>
               </div>
 
@@ -387,7 +387,7 @@ export default function MenuManagementPage() {
                   <label key={key} className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" checked={itemForm[key]}
                       onChange={(e) => setItemForm({ ...itemForm, [key]: e.target.checked })}
-                      className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary" />
+                      className="w-4 h-4 text-primary-accent border-gray-300 rounded focus:ring-primary-accent" />
                     <span className="text-sm text-gray-700">{label}</span>
                   </label>
                 ))}
@@ -397,7 +397,7 @@ export default function MenuManagementPage() {
 
               <div className="flex gap-3">
                 <button type="submit" disabled={itemSaving}
-                  className="flex-1 bg-primary text-white py-2.5 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-60">
+                  className="flex-1 gradient-accent text-white py-2.5 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-60">
                   {itemSaving ? 'Saving...' : 'Save'}
                 </button>
                 {editingItem && (

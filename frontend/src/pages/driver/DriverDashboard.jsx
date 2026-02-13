@@ -111,8 +111,8 @@ export default function DriverDashboard() {
           <p className="text-sm text-gray-500">Deliveries Today</p>
         </div>
         <div className="bg-white border border-gray-100 rounded-xl p-5 text-center">
-          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-            <FiTruck size={20} className="text-primary" />
+          <div className="w-10 h-10 bg-primary-accent/10 rounded-full flex items-center justify-center mx-auto mb-2">
+            <FiTruck size={20} className="text-primary-accent" />
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatPrice(todayEarnings)}</p>
           <p className="text-sm text-gray-500">Today's Earnings</p>
@@ -121,9 +121,9 @@ export default function DriverDashboard() {
 
       {/* Active Order Card */}
       {activeOrder && (
-        <div className="bg-primary/5 border-2 border-primary/20 rounded-xl p-6 mb-8">
+        <div className="bg-primary-accent/5 border-2 border-primary-accent/20 rounded-xl p-6 mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <FiNavigation className="text-primary" size={20} />
+            <FiNavigation className="text-primary-accent" size={20} />
             <h2 className="text-lg font-semibold text-gray-900">Active Delivery</h2>
           </div>
           <div className="space-y-3">
@@ -167,13 +167,13 @@ export default function DriverDashboard() {
       <div className="flex gap-2 mb-6">
         <button onClick={() => setView('available')}
           className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-            view === 'available' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            view === 'available' ? 'gradient-accent text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}>
           Available Orders ({available.length})
         </button>
         <button onClick={() => setView('history')}
           className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-            view === 'history' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            view === 'history' ? 'gradient-accent text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}>
           Delivery History ({history.length})
         </button>
@@ -217,7 +217,7 @@ export default function DriverDashboard() {
                   <button
                     onClick={() => handleAccept(order.order_number)}
                     disabled={updating || !!activeOrder}
-                    className="px-5 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition shrink-0 disabled:opacity-50"
+                    className="px-5 py-2.5 gradient-accent text-white rounded-lg font-medium hover:bg-primary/90 transition shrink-0 disabled:opacity-50"
                   >
                     {updating ? 'Accepting...' : 'Accept Delivery'}
                   </button>

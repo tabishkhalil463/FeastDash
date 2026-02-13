@@ -79,7 +79,7 @@ export default function RestaurantListPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+      <h1 className="text-2xl sm:text-3xl font-bold font-heading text-gray-900 dark:text-white mb-6">
         All Restaurants
       </h1>
 
@@ -94,7 +94,7 @@ export default function RestaurantListPage() {
         <select
           value={cuisine}
           onChange={(e) => { setCuisine(e.target.value); setPage(1); }}
-          className="px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="px-3 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-surface-card-dark dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-accent/50"
         >
           {CUISINES.map((c) => (
             <option key={c} value={c}>{c === 'All' ? 'All Cuisines' : c}</option>
@@ -103,7 +103,7 @@ export default function RestaurantListPage() {
         <select
           value={sort}
           onChange={(e) => { setSort(e.target.value); setPage(1); }}
-          className="px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="px-3 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-surface-card-dark dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-accent/50"
         >
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>Sort: {o.label}</option>
@@ -114,7 +114,7 @@ export default function RestaurantListPage() {
           value={city}
           onChange={(e) => { setCity(e.target.value); setPage(1); }}
           placeholder="City"
-          className="px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm w-32 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="px-3 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-surface-card-dark dark:text-white text-sm w-32 focus:outline-none focus:ring-2 focus:ring-primary-accent/50"
         />
       </div>
 
@@ -148,10 +148,10 @@ export default function RestaurantListPage() {
                     )}
                     <button
                       onClick={() => setPage(p)}
-                      className={`w-10 h-10 rounded-lg text-sm font-medium ${
+                      className={`w-10 h-10 rounded-xl text-sm font-medium ${
                         p === page
-                          ? 'bg-primary text-white'
-                          : 'border border-gray-200 hover:bg-gray-50'
+                          ? 'gradient-accent text-white'
+                          : 'border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 dark:text-gray-300'
                       }`}
                     >
                       {p}

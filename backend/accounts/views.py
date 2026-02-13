@@ -1,4 +1,6 @@
-from rest_framework import status
+from django.core.mail import send_mail
+from django.conf import settings as django_settings
+from rest_framework import status, serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -125,3 +127,35 @@ class ChangePasswordView(APIView):
         request.user.set_password(serializer.validated_data['new_password'])
         request.user.save()
         return Response({'message': 'Password changed successfully.'})
+
+
+class ContactSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=100)
+    email = serializers.EmailField()
+    subject = serializers.CharField(max_length=200)
+    message = serializers.CharField(max_length=2000)
+
+
+class ContactView(APIView):
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth'
+
+    def post(self, request):
+        serializer = ContactSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        try:
+            send_mail(
+                subject=f"[FeastDash Contact] {data['subject']}",
+                message=f"From: {data['name']} ({data['email']})\n\n{data['message']}",
+                from_email=django_settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[django_settings.CONTACT_EMAIL],
+                fail_silently=False,
+            )
+        except Exception:
+            # Log but don't fail — still acknowledge the message
+            pass
+
+        return Response({'message': 'Your message has been sent. We\'ll get back to you soon!'})

@@ -64,10 +64,10 @@ export default function SearchPage() {
             onChange={(e) => handleChange(e.target.value)}
             placeholder="Search restaurants, dishes..."
             aria-label="Search restaurants and dishes"
-            className="w-full pl-12 pr-10 py-4 text-lg border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+            className="w-full pl-12 pr-10 py-4 text-lg border border-gray-200 dark:border-white/10 rounded-2xl bg-white dark:bg-surface-card-dark text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-accent/50 focus:border-primary-accent"
           />
           {query && (
-            <button onClick={() => { setQuery(''); doSearch(''); }} aria-label="Clear search" className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            <button onClick={() => { setQuery(''); doSearch(''); }} aria-label="Clear search" className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <FiX size={20} />
             </button>
           )}
@@ -77,13 +77,13 @@ export default function SearchPage() {
       {/* Popular searches */}
       {!searched && (
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Popular Searches</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">Popular Searches</p>
           <div className="flex flex-wrap gap-3 justify-center">
             {POPULAR.map((term) => (
               <button
                 key={term}
                 onClick={() => handleChip(term)}
-                className="px-5 py-2.5 bg-gray-100 hover:bg-primary/10 hover:text-primary rounded-full text-sm font-medium text-gray-700 transition"
+                className="px-5 py-2.5 bg-gray-100 dark:bg-white/5 hover:bg-primary-accent/10 hover:text-primary-accent rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 transition"
               >
                 {term}
               </button>
@@ -95,7 +95,7 @@ export default function SearchPage() {
       {/* Loading */}
       {loading && (
         <div className="flex justify-center py-20">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-primary-accent border-t-transparent rounded-full animate-spin" />
         </div>
       )}
 
@@ -105,15 +105,14 @@ export default function SearchPage() {
           {!hasResults ? (
             <div className="text-center py-20">
               <div className="text-6xl mb-4">🔍</div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">No results for "{query}"</h2>
-              <p className="text-gray-500">Try a different search term or browse our restaurants</p>
+              <h2 className="text-xl font-heading font-semibold text-gray-900 dark:text-white mb-2">No results for &quot;{query}&quot;</h2>
+              <p className="text-gray-500 dark:text-gray-400">Try a different search term or browse our restaurants</p>
             </div>
           ) : (
             <>
-              {/* Restaurants */}
               {results.restaurants.length > 0 && (
                 <section className="mb-10">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">Restaurants</h2>
+                  <h2 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-4">Restaurants</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {results.restaurants.map((r) => (
                       <RestaurantCard key={r.id} restaurant={r} />
@@ -122,35 +121,34 @@ export default function SearchPage() {
                 </section>
               )}
 
-              {/* Dishes */}
               {results.menu_items.length > 0 && (
                 <section>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">Dishes</h2>
+                  <h2 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-4">Dishes</h2>
                   <div className="space-y-3">
                     {results.menu_items.map((item) => (
                       <Link
                         key={item.id}
                         to={`/restaurants/${item.restaurant_slug}`}
-                        className="flex items-center gap-4 bg-white border border-gray-100 rounded-xl p-4 hover:shadow-sm transition"
+                        className="flex items-center gap-4 bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-4 hover:shadow-md transition"
                       >
-                        <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+                        <div className="w-16 h-16 rounded-xl bg-gray-100 dark:bg-surface-dark overflow-hidden shrink-0">
                           <img
-                            src={mediaUrl(item.image) || `https://placehold.co/80x80/f3f4f6/9ca3af?text=${encodeURIComponent(item.name[0])}`}
+                            src={mediaUrl(item.image) || `https://placehold.co/80x80/4A1982/white?text=${encodeURIComponent(item.name[0])}`}
                             alt={item.name} loading="lazy" className="w-full h-full object-cover"
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 truncate">{item.name}</p>
-                          <p className="text-sm text-gray-500 truncate">{item.restaurant_name}</p>
+                          <p className="font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{item.restaurant_name}</p>
                         </div>
                         <div className="text-right shrink-0">
                           {item.discounted_price ? (
                             <>
-                              <p className="font-semibold text-primary">{formatPrice(Number(item.discounted_price))}</p>
+                              <p className="font-semibold text-primary-accent">{formatPrice(Number(item.discounted_price))}</p>
                               <p className="text-xs text-gray-400 line-through">{formatPrice(Number(item.price))}</p>
                             </>
                           ) : (
-                            <p className="font-semibold text-gray-900">{formatPrice(Number(item.price))}</p>
+                            <p className="font-semibold text-gray-900 dark:text-white">{formatPrice(Number(item.price))}</p>
                           )}
                         </div>
                       </Link>

@@ -94,10 +94,12 @@ class Command(BaseCommand):
             admin.user_type = 'admin'
             admin.first_name = 'Admin'
             admin.last_name = 'User'
+            admin.is_staff = True
+            admin.is_superuser = True
             admin.set_password('test1234')
             admin.save()
         else:
-            admin = CustomUser.objects.create_user(
+            admin = CustomUser.objects.create_superuser(
                 username='admin', email='admin@feastdash.pk', password='test1234',
                 first_name='Admin', last_name='User',
                 phone='03001111111', city='Lahore', user_type='admin',

@@ -27,7 +27,7 @@ export default function RestaurantDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <span className="h-8 w-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+        <span className="h-8 w-8 border-4 border-primary-accent/30 border-t-primary-accent rounded-full animate-spin" />
       </div>
     );
   }
@@ -36,8 +36,8 @@ export default function RestaurantDashboard() {
     return (
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-            <FiSettings size={28} className="text-primary" />
+          <div className="w-16 h-16 rounded-full gradient-accent flex items-center justify-center mx-auto mb-4">
+            <FiSettings size={28} className="text-white" />
           </div>
           <h2 className="text-xl font-bold text-gray-900">
             Set Up Your Restaurant
@@ -47,7 +47,7 @@ export default function RestaurantDashboard() {
           </p>
           <Link
             to="/restaurant/setup"
-            className="inline-block mt-6 px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition"
+            className="inline-block mt-6 px-6 py-2.5 gradient-accent text-white rounded-lg font-medium hover:bg-primary/90 transition"
           >
             Get Started
           </Link>
@@ -122,7 +122,7 @@ export default function RestaurantDashboard() {
           return (
             <div
               key={s.label}
-              className="bg-white rounded-xl border border-gray-100 p-5"
+              className="bg-white dark:bg-surface-card-dark rounded-2xl border border-gray-100 dark:border-white/5 p-5"
             >
               <div className={`w-10 h-10 rounded-lg ${s.color} flex items-center justify-center mb-3`}>
                 <Icon size={20} />
@@ -138,7 +138,7 @@ export default function RestaurantDashboard() {
       <div className="flex flex-wrap gap-3 mb-8">
         <Link
           to="/restaurant/menu"
-          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition"
+          className="flex items-center gap-2 px-5 py-2.5 gradient-accent text-white rounded-lg font-medium hover:bg-primary/90 transition"
         >
           <FiList size={16} /> Manage Menu
         </Link>
@@ -157,7 +157,7 @@ export default function RestaurantDashboard() {
       </div>
 
       {/* Recent orders */}
-      <div className="bg-white rounded-xl border border-gray-100">
+      <div className="bg-white dark:bg-surface-card-dark rounded-2xl border border-gray-100 dark:border-white/5">
         <div className="p-5 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">
             Recent Orders

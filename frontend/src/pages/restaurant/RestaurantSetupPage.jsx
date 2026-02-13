@@ -108,20 +108,20 @@ export default function RestaurantSetupPage() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Name</label>
           <input name="name" value={form.name} onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <textarea name="description" value={form.description} onChange={handleChange} rows={3}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none" />
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50 resize-none" />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Cuisine Type</label>
             <select name="cuisine_type" value={form.cuisine_type} onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50">
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-accent/50">
               <option value="">Select cuisine</option>
               {CUISINES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -129,26 +129,26 @@ export default function RestaurantSetupPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
             <input name="city" value={form.city} onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
           <input name="address" value={form.address} onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
             <input name="phone" value={form.phone} onChange={handleChange} placeholder="03XXXXXXXXX"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input name="email" type="email" value={form.email} onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
         </div>
 
@@ -156,12 +156,12 @@ export default function RestaurantSetupPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Opening Time</label>
             <input type="time" name="opening_time" value={form.opening_time} onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Closing Time</label>
             <input type="time" name="closing_time" value={form.closing_time} onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
         </div>
 
@@ -169,17 +169,17 @@ export default function RestaurantSetupPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Order (Rs.)</label>
             <input type="number" name="minimum_order" value={form.minimum_order} onChange={handleChange} min="0"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Fee (Rs.)</label>
             <input type="number" name="delivery_fee" value={form.delivery_fee} onChange={handleChange} min="0"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Time (min)</label>
             <input type="number" name="estimated_delivery_time" value={form.estimated_delivery_time} onChange={handleChange} min="1"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-accent/50" />
           </div>
         </div>
 
@@ -189,7 +189,7 @@ export default function RestaurantSetupPage() {
         </div>
 
         <button type="submit" disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white py-2.5 rounded-lg font-medium transition disabled:opacity-60">
+          className="w-full flex items-center justify-center gap-2 gradient-accent text-white py-2.5 rounded-lg font-medium transition disabled:opacity-60">
           {loading
             ? <span className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             : isEdit ? 'Update Restaurant' : 'Create Restaurant'}

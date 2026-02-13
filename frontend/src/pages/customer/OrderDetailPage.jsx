@@ -112,14 +112,14 @@ export default function OrderDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Link to="/orders" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-primary mb-6">
+      <Link to="/orders" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-primary-accent mb-6">
         <FiArrowLeft size={14} /> Back to Orders
       </Link>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{order.order_number}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{order.order_number}</h1>
           <p className="text-sm text-gray-500 mt-1">
             Placed on {new Date(order.created_at).toLocaleDateString('en-PK', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
           </p>
@@ -129,7 +129,7 @@ export default function OrderDetailPage() {
 
       {/* Progress stepper */}
       {!isCancelled && (
-        <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
+        <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">Order Progress</h3>
           <div className="flex items-center">
             {STATUS_STEPS.map((s, i) => (
@@ -154,7 +154,7 @@ export default function OrderDetailPage() {
       )}
 
       {/* Restaurant & Driver Info */}
-      <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
+      <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
             <img src={mediaUrl(order.restaurant_image) || 'https://placehold.co/80x80/f3f4f6/9ca3af?text=R'}
@@ -182,7 +182,7 @@ export default function OrderDetailPage() {
       </div>
 
       {/* Order Items */}
-      <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
+      <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
         <h3 className="font-semibold text-gray-900 mb-4">Order Items</h3>
         <div className="space-y-3">
           {order.items.map((item) => (
@@ -202,7 +202,7 @@ export default function OrderDetailPage() {
       </div>
 
       {/* Price Breakdown */}
-      <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
+      <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
         <h3 className="font-semibold text-gray-900 mb-4">Payment Details</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between text-gray-500"><span>Subtotal</span><span>{formatPrice(Number(order.total_amount))}</span></div>
@@ -222,7 +222,7 @@ export default function OrderDetailPage() {
       </div>
 
       {order.special_instructions && (
-        <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
+        <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
           <h3 className="font-semibold text-gray-900 mb-2">Special Instructions</h3>
           <p className="text-sm text-gray-500">{order.special_instructions}</p>
         </div>
@@ -232,7 +232,7 @@ export default function OrderDetailPage() {
       {isDelivered && !hasReview && (
         <button
           onClick={() => setReviewModalOpen(true)}
-          className="w-full py-3 bg-accent text-gray-900 rounded-xl font-medium hover:bg-accent/90 transition mb-4 flex items-center justify-center gap-2"
+          className="w-full py-3 gradient-accent text-white rounded-xl font-medium hover:bg-accent/90 transition mb-4 flex items-center justify-center gap-2"
         >
           <HiStar size={18} /> Write a Review
         </button>
@@ -258,7 +258,7 @@ export default function OrderDetailPage() {
       {/* Review Modal */}
       {reviewModalOpen && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 relative">
+          <div className="bg-white dark:bg-surface-card-dark rounded-2xl w-full max-w-md p-6 relative">
             <button onClick={() => setReviewModalOpen(false)} aria-label="Close review modal" className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
               <FiX size={20} />
             </button>
@@ -299,7 +299,7 @@ export default function OrderDetailPage() {
             <button
               onClick={handleReviewSubmit}
               disabled={reviewSubmitting || reviewRating === 0}
-              className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50"
+              className="w-full py-3 gradient-accent text-white rounded-xl font-medium hover:bg-primary/90 transition disabled:opacity-50"
             >
               {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
             </button>

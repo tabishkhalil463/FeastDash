@@ -32,10 +32,10 @@ export default function AdminLayout({ children }) {
   };
 
   const Sidebar = ({ mobile }) => (
-    <div className={`flex flex-col h-full bg-secondary text-white ${mobile ? 'w-64' : 'w-64 shrink-0'}`}>
+    <div className={`flex flex-col h-full gradient-primary text-white ${mobile ? 'w-64' : 'w-64 shrink-0'}`}>
       <div className="px-6 py-5 border-b border-white/10">
-        <Link to="/admin/dashboard" className="text-xl font-bold">
-          <span className="text-primary">Feast</span>
+        <Link to="/admin/dashboard" className="text-xl font-heading font-bold">
+          <span className="text-primary-light">Feast</span>
           <span className="text-white">Dash</span>
           <span className="text-xs ml-2 bg-white/20 px-2 py-0.5 rounded-full">Admin</span>
         </Link>
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }) {
               to={to}
               onClick={() => mobile && setSidebarOpen(false)}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition ${
-                active ? 'bg-white/20 text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                active ? 'bg-white/15 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
               <Icon size={18} />
@@ -89,19 +89,19 @@ export default function AdminLayout({ children }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen overflow-auto">
         {/* Top bar */}
-        <header className="sticky top-0 bg-white border-b border-gray-200 z-30">
+        <header className="sticky top-0 bg-white dark:bg-surface-dark border-b border-gray-200 dark:border-white/10 z-30">
           <div className="flex items-center justify-between px-4 sm:px-6 h-16">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(true)} aria-label="Open sidebar" className="lg:hidden text-gray-600">
+              <button onClick={() => setSidebarOpen(true)} aria-label="Open sidebar" className="lg:hidden text-gray-600 dark:text-gray-300">
                 <FiMenu size={22} />
               </button>
-              <h1 className="text-lg font-semibold text-gray-900 hidden sm:block">FeastDash Admin</h1>
+              <h1 className="text-lg font-heading font-semibold text-gray-900 dark:text-white hidden sm:block">FeastDash Admin</h1>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+              <div className="w-8 h-8 rounded-full bg-primary-accent/10 flex items-center justify-center text-primary-accent font-semibold text-sm">
                 {user?.first_name?.[0]?.toUpperCase() || 'A'}
               </div>
-              <span className="text-sm font-medium text-gray-700 hidden sm:block">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:block">
                 {user?.first_name || 'Admin'}
               </span>
             </div>
@@ -109,7 +109,7 @@ export default function AdminLayout({ children }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6 bg-gray-50">
+        <main className="flex-1 p-4 sm:p-6 bg-surface-light dark:bg-surface-dark">
           {children}
         </main>
       </div>

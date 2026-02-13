@@ -50,10 +50,7 @@ class OrderTests(APITestCase):
         )
 
     def _auth(self, user):
-        resp = self.client.post('/api/auth/login/', {
-            'email': user.email, 'password': 'test1234',
-        })
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {resp.data["tokens"]["access"]}')
+        self.client.force_authenticate(user=user)
 
     def test_add_to_cart(self):
         self._auth(self.customer)

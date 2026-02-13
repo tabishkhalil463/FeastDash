@@ -45,14 +45,14 @@ export default function CustomerOrdersPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">My Orders</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">My Orders</h1>
 
       {/* Filter Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide">
         {TABS.map((t) => (
           <button key={t.value} onClick={() => setTab(t.value)}
             className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${
-              tab === t.value ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              tab === t.value ? 'gradient-accent text-white' : 'bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10'
             }`}>
             {t.label}
           </button>
@@ -74,7 +74,7 @@ export default function CustomerOrdersPage() {
             {tab === 'all' ? 'No orders yet' : `No ${tab} orders`}
           </p>
           {tab === 'all' && (
-            <Link to="/restaurants" className="inline-block mt-4 px-5 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition">
+            <Link to="/restaurants" className="inline-block mt-4 px-5 py-2 gradient-accent text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition">
               Order Now
             </Link>
           )}
@@ -84,7 +84,7 @@ export default function CustomerOrdersPage() {
           <div className="space-y-4">
             {orders.map((order) => (
               <Link key={order.id} to={`/orders/${order.order_number}`}
-                className="block bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md transition">
+                className="block bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-4 hover:shadow-md transition">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                     <img
@@ -124,7 +124,7 @@ export default function CustomerOrdersPage() {
             )}
             {hasNext && (
               <button onClick={() => setPage(page + 1)}
-                className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90">
+                className="px-4 py-2 gradient-accent text-white rounded-lg text-sm font-medium hover:bg-primary/90">
                 Next
               </button>
             )}
