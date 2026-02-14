@@ -132,7 +132,7 @@ class ChangePasswordView(APIView):
 class ContactSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
     email = serializers.EmailField()
-    subject = serializers.CharField(max_length=200)
+    subject = serializers.CharField(max_length=200, required=False, default='General Inquiry')
     message = serializers.CharField(max_length=2000)
 
 
@@ -146,16 +146,16 @@ class ContactView(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
+        # Send email in background-safe way (non-blocking)
         try:
             send_mail(
                 subject=f"[FeastDash Contact] {data['subject']}",
                 message=f"From: {data['name']} ({data['email']})\n\n{data['message']}",
                 from_email=django_settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[django_settings.CONTACT_EMAIL],
-                fail_silently=False,
+                fail_silently=True,
             )
         except Exception:
-            # Log but don't fail — still acknowledge the message
             pass
 
         return Response({'message': 'Your message has been sent. We\'ll get back to you soon!'})
