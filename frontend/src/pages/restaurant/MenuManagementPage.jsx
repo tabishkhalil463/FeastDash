@@ -204,7 +204,7 @@ export default function MenuManagementPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Menu Management</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Menu Management</h1>
         <button onClick={() => openCatModal()}
           className="flex items-center gap-2 px-4 py-2 gradient-accent text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition">
           <FiPlus size={16} /> Add Category
@@ -224,13 +224,13 @@ export default function MenuManagementPage() {
             const items = itemsByCategory[cat.id] || [];
             const isOpen = expanded[cat.id];
             return (
-              <div key={cat.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+              <div key={cat.id} className="bg-white dark:bg-surface-card-dark rounded-xl border border-gray-100 dark:border-white/5 overflow-hidden">
                 {/* Category header */}
                 <div className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50"
                   onClick={() => setExpanded((e) => ({ ...e, [cat.id]: !e[cat.id] }))}>
                   <div className="flex items-center gap-3">
                     {isOpen ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
-                    <h3 className="font-semibold text-gray-900">{cat.name}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{cat.name}</h3>
                     <span className="text-xs text-gray-400">{cat.items_count ?? items.length} items</span>
                   </div>
                   <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
@@ -253,7 +253,7 @@ export default function MenuManagementPage() {
                                 alt={item.name} loading="lazy" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium text-sm text-gray-900 truncate">{item.name}</p>
+                              <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{item.name}</p>
                               <p className="text-sm text-primary-accent font-medium">{formatPrice(item.price)}</p>
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
@@ -286,7 +286,7 @@ export default function MenuManagementPage() {
       {/* Category Modal */}
       {catModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+          <div className="bg-white dark:bg-surface-card-dark rounded-2xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">{editingCat ? 'Edit Category' : 'Add Category'}</h2>
               <button onClick={() => setCatModal(false)} aria-label="Close modal"><FiX size={20} className="text-gray-400" /></button>
@@ -332,7 +332,7 @@ export default function MenuManagementPage() {
       {/* Item Modal */}
       {itemModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-surface-card-dark rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">{editingItem ? 'Edit Item' : 'Add Item'}</h2>
               <button onClick={() => setItemModal(false)} aria-label="Close modal"><FiX size={20} className="text-gray-400" /></button>

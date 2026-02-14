@@ -84,13 +84,13 @@ export default function DriverDashboard() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Driver Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Driver Dashboard</h1>
       </div>
 
       {/* Availability Toggle */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 mb-6 flex items-center justify-between">
+      <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-5 mb-6 flex items-center justify-between">
         <div>
-          <p className="font-medium text-gray-900">{isAvailable ? 'Available' : 'Unavailable'}</p>
+          <p className="font-medium text-gray-900 dark:text-white">{isAvailable ? 'Available' : 'Unavailable'}</p>
           <p className="text-sm text-gray-500">
             {isAvailable ? "You'll receive new delivery requests" : "You won't receive new delivery requests"}
           </p>
@@ -103,18 +103,18 @@ export default function DriverDashboard() {
 
       {/* Today's Stats */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-white border border-gray-100 rounded-xl p-5 text-center">
+        <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-5 text-center">
           <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
             <FiCheck size={20} className="text-green-600" />
           </div>
-          <p className="text-2xl font-bold text-gray-900">{todayDeliveries.length}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{todayDeliveries.length}</p>
           <p className="text-sm text-gray-500">Deliveries Today</p>
         </div>
-        <div className="bg-white border border-gray-100 rounded-xl p-5 text-center">
+        <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-5 text-center">
           <div className="w-10 h-10 bg-primary-accent/10 rounded-full flex items-center justify-center mx-auto mb-2">
             <FiTruck size={20} className="text-primary-accent" />
           </div>
-          <p className="text-2xl font-bold text-gray-900">{formatPrice(todayEarnings)}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatPrice(todayEarnings)}</p>
           <p className="text-sm text-gray-500">Today's Earnings</p>
         </div>
       </div>
@@ -128,7 +128,7 @@ export default function DriverDashboard() {
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-gray-900">{activeOrder.order_number}</span>
+              <span className="font-semibold text-gray-900 dark:text-white">{activeOrder.order_number}</span>
               <StatusBadge status={activeOrder.status} />
             </div>
             <p className="text-sm text-gray-600">
@@ -144,7 +144,7 @@ export default function DriverDashboard() {
             )}
             <div className="flex items-center justify-between pt-3 border-t border-primary/10">
               <div>
-                <span className="font-medium text-gray-900 text-lg">{formatPrice(Number(activeOrder.grand_total))}</span>
+                <span className="font-medium text-gray-900 dark:text-white text-lg">{formatPrice(Number(activeOrder.grand_total))}</span>
                 <span className="text-sm text-gray-500 ml-2">
                   {activeOrder.payment_method === 'cod' ? '(Collect Cash)' : '(Paid Online)'}
                 </span>
@@ -196,17 +196,17 @@ export default function DriverDashboard() {
         ) : (
           <div className="space-y-4">
             {available.map((order) => (
-              <div key={order.id} className="bg-white border border-gray-100 rounded-xl p-5">
+              <div key={order.id} className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="font-semibold text-gray-900">{order.order_number}</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{order.order_number}</span>
                       <StatusBadge status={order.status} />
                     </div>
                     <p className="text-sm text-gray-600">{order.restaurant_name}</p>
                     <div className="flex flex-wrap gap-3 mt-1 text-sm text-gray-500">
                       <span>{order.items_count} item{order.items_count !== 1 ? 's' : ''}</span>
-                      <span className="font-medium text-gray-900">{formatPrice(Number(order.grand_total))}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{formatPrice(Number(order.grand_total))}</span>
                       <span className="capitalize">{order.payment_method === 'cod' ? 'COD' : order.payment_method}</span>
                       <span className="flex items-center gap-1">
                         <FiClock size={12} />
@@ -239,11 +239,11 @@ export default function DriverDashboard() {
         ) : (
           <div className="space-y-4">
             {history.map((order) => (
-              <div key={order.id} className="bg-white border border-gray-100 rounded-xl p-5">
+              <div key={order.id} className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-5">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-1">
-                      <span className="font-semibold text-gray-900">{order.order_number}</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{order.order_number}</span>
                       <StatusBadge status={order.status} />
                     </div>
                     <p className="text-sm text-gray-500">{order.restaurant_name}</p>
@@ -254,7 +254,7 @@ export default function DriverDashboard() {
                       <span>{order.items_count} item{order.items_count !== 1 ? 's' : ''}</span>
                     </div>
                   </div>
-                  <span className="font-medium text-gray-900">{formatPrice(Number(order.grand_total))}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{formatPrice(Number(order.grand_total))}</span>
                 </div>
               </div>
             ))}

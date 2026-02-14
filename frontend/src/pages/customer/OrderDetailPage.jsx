@@ -161,7 +161,7 @@ export default function OrderDetailPage() {
               alt={order.restaurant_name} loading="lazy" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{order.restaurant_name}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{order.restaurant_name}</p>
             {order.restaurant_phone && (
               <p className="text-sm text-gray-500 flex items-center gap-1"><FiPhone size={12} /> {order.restaurant_phone}</p>
             )}
@@ -175,7 +175,7 @@ export default function OrderDetailPage() {
         </div>
         {order.driver_name && (
           <div className="border-t border-gray-100 mt-4 pt-4">
-            <p className="text-sm text-gray-500">Driver: <span className="font-medium text-gray-900">{order.driver_name}</span></p>
+            <p className="text-sm text-gray-500">Driver: <span className="font-medium text-gray-900 dark:text-white">{order.driver_name}</span></p>
             {order.driver_phone && <p className="text-sm text-gray-500"><FiPhone size={12} className="inline" /> {order.driver_phone}</p>}
           </div>
         )}
@@ -183,7 +183,7 @@ export default function OrderDetailPage() {
 
       {/* Order Items */}
       <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Order Items</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Order Items</h3>
         <div className="space-y-3">
           {order.items.map((item) => (
             <div key={item.id} className="flex items-center gap-3">
@@ -192,10 +192,10 @@ export default function OrderDetailPage() {
                   alt={item.menu_item_name} loading="lazy" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{item.menu_item_name}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.menu_item_name}</p>
                 <p className="text-xs text-gray-500">{item.quantity} x {formatPrice(Number(item.price))}</p>
               </div>
-              <span className="text-sm font-medium text-gray-900">{formatPrice(Number(item.subtotal))}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">{formatPrice(Number(item.subtotal))}</span>
             </div>
           ))}
         </div>
@@ -203,12 +203,12 @@ export default function OrderDetailPage() {
 
       {/* Price Breakdown */}
       <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Payment Details</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Payment Details</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between text-gray-500"><span>Subtotal</span><span>{formatPrice(Number(order.total_amount))}</span></div>
           <div className="flex justify-between text-gray-500"><span>Delivery Fee</span><span>{formatPrice(Number(order.delivery_fee))}</span></div>
           <div className="flex justify-between text-gray-500"><span>Tax</span><span>{formatPrice(Number(order.tax_amount))}</span></div>
-          <div className="flex justify-between font-semibold text-gray-900 text-lg pt-3 border-t border-gray-100">
+          <div className="flex justify-between font-semibold text-gray-900 dark:text-white text-lg pt-3 border-t border-gray-100 dark:border-white/10">
             <span>Total</span><span>{formatPrice(Number(order.grand_total))}</span>
           </div>
           <div className="flex justify-between text-gray-500 pt-2">
@@ -223,7 +223,7 @@ export default function OrderDetailPage() {
 
       {order.special_instructions && (
         <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-6">
-          <h3 className="font-semibold text-gray-900 mb-2">Special Instructions</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Special Instructions</h3>
           <p className="text-sm text-gray-500">{order.special_instructions}</p>
         </div>
       )}
@@ -262,7 +262,7 @@ export default function OrderDetailPage() {
             <button onClick={() => setReviewModalOpen(false)} aria-label="Close review modal" className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
               <FiX size={20} />
             </button>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Write a Review</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Write a Review</h3>
             <p className="text-sm text-gray-500 mb-5">How was your experience with {order.restaurant_name}?</p>
 
             {/* Star rating */}

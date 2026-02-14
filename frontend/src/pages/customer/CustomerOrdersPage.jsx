@@ -94,13 +94,13 @@ export default function CustomerOrdersPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-medium text-gray-900 truncate">{order.restaurant_name}</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white truncate">{order.restaurant_name}</h3>
                       <FiChevronRight size={18} className="text-gray-400 shrink-0" />
                     </div>
                     <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
                       <span>{order.order_number}</span>
                       <span>{order.items_count} item{order.items_count !== 1 ? 's' : ''}</span>
-                      <span className="font-medium text-gray-900">{formatPrice(Number(order.grand_total))}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{formatPrice(Number(order.grand_total))}</span>
                     </div>
                     <div className="flex items-center gap-3 mt-2">
                       <StatusBadge status={order.status} />

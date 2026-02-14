@@ -56,24 +56,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team placeholder */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">Our Team</h2>
-        <p className="text-gray-500 dark:text-gray-400 mb-8">
-          A passionate group of foodies, engineers, and designers working to transform food delivery in Pakistan.
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {['CEO', 'CTO', 'Design Lead', 'Operations'].map((role) => (
-            <div key={role}>
-              <div className="w-20 h-20 gradient-primary-soft rounded-full mx-auto mb-3 flex items-center justify-center text-white font-heading font-bold text-xl">
-                {role[0]}
-              </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">Team Member</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{role}</p>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

@@ -101,7 +101,7 @@ export default function RestaurantOrdersPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Orders</h1>
         <button onClick={() => fetchOrders(false)}
           className="flex items-center gap-1 text-sm text-gray-500 hover:text-primary-accent transition">
           <FiRefreshCw size={14} /> Refresh
@@ -144,17 +144,17 @@ export default function RestaurantOrdersPage() {
             const actions = ACTIONS[order.status] || [];
             const isExpanded = expandedId === order.id;
             return (
-              <div key={order.id} className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+              <div key={order.id} className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl overflow-hidden">
                 <div className="p-5">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex-1 min-w-0 cursor-pointer" onClick={() => toggleExpand(order.id, order.order_number)}>
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="font-semibold text-gray-900">{order.order_number}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">{order.order_number}</span>
                         <StatusBadge status={order.status} />
                       </div>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                         <span>{order.items_count} item{order.items_count !== 1 ? 's' : ''}</span>
-                        <span className="font-medium text-gray-900">{formatPrice(Number(order.grand_total))}</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{formatPrice(Number(order.grand_total))}</span>
                         <span className="capitalize">{order.payment_method === 'cod' ? 'COD' : order.payment_method}</span>
                         <span className="flex items-center gap-1">
                           <FiClock size={12} /> {timeAgo(order.created_at)}

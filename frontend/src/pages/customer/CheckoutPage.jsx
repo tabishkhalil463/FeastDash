@@ -230,7 +230,7 @@ export default function CheckoutPage() {
         <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <FiX size={40} className="text-red-600" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Failed</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Payment Failed</h2>
         <p className="text-gray-500 mb-8">{orderResult.error}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button onClick={() => { setOrderResult(null); setStep(1); }}
@@ -250,7 +250,7 @@ export default function CheckoutPage() {
   if (itemsCount === 0) {
     return (
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Cart is empty</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Cart is empty</h2>
         <p className="text-gray-500 mb-6">Add items before checking out.</p>
         <Link to="/restaurants" className="px-6 py-3 gradient-accent text-white rounded-lg font-medium">
           Browse Restaurants
@@ -266,7 +266,7 @@ export default function CheckoutPage() {
       <Link to="/cart" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-primary mb-6">
         <FiArrowLeft size={14} /> Back to Cart
       </Link>
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">Checkout</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Checkout</h1>
 
       {/* Stepper */}
       <div className="flex items-center gap-2 mb-10">
@@ -277,7 +277,7 @@ export default function CheckoutPage() {
             }`}>
               {i < step ? <FiCheck size={16} /> : i + 1}
             </div>
-            <span className={`text-sm font-medium hidden sm:block ${i === step ? 'text-gray-900' : 'text-gray-400'}`}>{s}</span>
+            <span className={`text-sm font-medium hidden sm:block ${i === step ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>{s}</span>
             {i < STEPS.length - 1 && <div className={`flex-1 h-0.5 ${i < step ? 'bg-green-500' : 'bg-gray-200'}`} />}
           </div>
         ))}
@@ -289,7 +289,7 @@ export default function CheckoutPage() {
           {/* Step 0: Delivery */}
           {step === 0 && (
             <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6">
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
                 <FiMapPin className="text-primary-accent" /> Delivery Details
               </h2>
               <div className="space-y-4">
@@ -309,7 +309,7 @@ export default function CheckoutPage() {
                   <select
                     value={form.delivery_city}
                     onChange={(e) => update('delivery_city', e.target.value)}
-                    className={`w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none bg-white ${errors.delivery_city ? 'border-red-300' : 'border-gray-200'}`}
+                    className={`w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none bg-white dark:bg-surface-card-dark dark:text-white ${errors.delivery_city ? 'border-red-300' : 'border-gray-200 dark:border-white/10'}`}
                   >
                     <option value="">Select City</option>
                     {CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
           {/* Step 1: Payment */}
           {step === 1 && (
             <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6">
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
                 <FiCreditCard className="text-primary-accent" /> Choose Payment Method
               </h2>
               <div className="space-y-3">
@@ -369,7 +369,7 @@ export default function CheckoutPage() {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <p className="font-medium text-gray-900">{pm.label}</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{pm.label}</p>
                             {pm.badge && (
                               <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">{pm.badge}</span>
                             )}
@@ -461,7 +461,7 @@ export default function CheckoutPage() {
           {/* Step 2: Review */}
           {step === 2 && (
             <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-6">
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
                 <FiFileText className="text-primary-accent" /> Review Your Order
               </h2>
               {/* Restaurant */}
@@ -482,10 +482,10 @@ export default function CheckoutPage() {
                           alt={item.name} loading="lazy" className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
                         <p className="text-xs text-gray-500">{ci.quantity} x {formatPrice(price)}</p>
                       </div>
-                      <span className="text-sm font-medium text-gray-900">{formatPrice(price * ci.quantity)}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{formatPrice(price * ci.quantity)}</span>
                     </div>
                   );
                 })}
@@ -494,11 +494,11 @@ export default function CheckoutPage() {
               <div className="border-t border-gray-100 pt-4 space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Delivery To</span>
-                  <span className="text-gray-900 text-right max-w-[60%]">{form.delivery_address}, {form.delivery_city}</span>
+                  <span className="text-gray-900 dark:text-white text-right max-w-[60%]">{form.delivery_address}, {form.delivery_city}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Phone</span>
-                  <span className="text-gray-900">{form.phone}</span>
+                  <span className="text-gray-900 dark:text-white">{form.phone}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500">Payment</span>
@@ -508,13 +508,13 @@ export default function CheckoutPage() {
                         <selectedPM.icon size={12} />
                       </div>
                     )}
-                    <span className="text-gray-900">{selectedPM?.label}</span>
+                    <span className="text-gray-900 dark:text-white">{selectedPM?.label}</span>
                   </div>
                 </div>
                 {form.special_instructions && (
                   <div className="flex justify-between">
                     <span className="text-gray-500">Notes</span>
-                    <span className="text-gray-900 text-right max-w-[60%]">{form.special_instructions}</span>
+                    <span className="text-gray-900 dark:text-white text-right max-w-[60%]">{form.special_instructions}</span>
                   </div>
                 )}
               </div>
@@ -546,7 +546,7 @@ export default function CheckoutPage() {
         {/* Order summary sidebar */}
         <div className="lg:col-span-1">
           <div className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-2xl p-5 sticky top-20">
-            <h3 className="font-semibold text-gray-900 mb-1">Order Summary</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Order Summary</h3>
             {restaurant && (
               <p className="text-sm text-gray-500 mb-4">From {restaurant.name}</p>
             )}
@@ -560,7 +560,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between text-gray-500">
                 <span>Tax (5%)</span><span>{formatPrice(tax)}</span>
               </div>
-              <div className="flex justify-between font-semibold text-gray-900 text-lg pt-3 border-t border-gray-100">
+              <div className="flex justify-between font-semibold text-gray-900 dark:text-white text-lg pt-3 border-t border-gray-100 dark:border-white/10">
                 <span>Total</span><span>{formatPrice(grandTotal)}</span>
               </div>
             </div>

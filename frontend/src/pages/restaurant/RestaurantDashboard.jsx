@@ -35,11 +35,11 @@ export default function RestaurantDashboard() {
   if (!data?.has_restaurant) {
     return (
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white dark:bg-surface-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 p-8">
           <div className="w-16 h-16 rounded-full gradient-accent flex items-center justify-center mx-auto mb-4">
             <FiSettings size={28} className="text-white" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Set Up Your Restaurant
           </h2>
           <p className="text-gray-500 mt-2">
@@ -100,7 +100,7 @@ export default function RestaurantDashboard() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             {restaurant.name}
           </h1>
           <span
@@ -128,7 +128,7 @@ export default function RestaurantDashboard() {
                 <Icon size={20} />
               </div>
               <p className="text-sm text-gray-500">{s.label}</p>
-              <p className="text-xl font-bold text-gray-900 mt-1">{s.value}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">{s.value}</p>
             </div>
           );
         })}
@@ -159,7 +159,7 @@ export default function RestaurantDashboard() {
       {/* Recent orders */}
       <div className="bg-white dark:bg-surface-card-dark rounded-2xl border border-gray-100 dark:border-white/5">
         <div className="p-5 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Recent Orders
           </h2>
         </div>
@@ -178,7 +178,7 @@ export default function RestaurantDashboard() {
               <tbody>
                 {recent_orders.map((o) => (
                   <tr key={o.order_number} className="border-b border-gray-50">
-                    <td className="px-5 py-3 font-medium text-gray-900">
+                    <td className="px-5 py-3 font-medium text-gray-900 dark:text-white">
                       {o.order_number}
                     </td>
                     <td className="px-5 py-3 text-gray-600">{o.customer}</td>

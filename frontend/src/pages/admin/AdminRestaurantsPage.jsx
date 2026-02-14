@@ -45,7 +45,7 @@ export default function AdminRestaurantsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Restaurants</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Restaurants</h1>
 
       {/* Tabs */}
       <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit mb-6">
@@ -85,10 +85,10 @@ export default function AdminRestaurantsPage() {
         /* Pending cards */
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {restaurants.map((r) => (
-            <div key={r.id} className="bg-white border border-gray-100 rounded-xl p-5">
+            <div key={r.id} className="bg-white dark:bg-surface-card-dark border border-gray-100 dark:border-white/5 rounded-xl p-5">
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{r.name}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{r.name}</h3>
                   <p className="text-sm text-gray-500">{r.cuisine_type} &middot; {r.city}</p>
                 </div>
                 <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">Pending</span>
@@ -112,7 +112,7 @@ export default function AdminRestaurantsPage() {
         </div>
       ) : (
         /* All restaurants table */
-        <div className="bg-white rounded-xl border border-gray-100 overflow-x-auto">
+        <div className="bg-white dark:bg-surface-card-dark rounded-xl border border-gray-100 dark:border-white/5 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-gray-500 border-b border-gray-100">
@@ -127,7 +127,7 @@ export default function AdminRestaurantsPage() {
             <tbody>
               {restaurants.map((r) => (
                 <tr key={r.id} className="border-b border-gray-50 hover:bg-gray-50/50">
-                  <td className="px-4 py-3 font-medium text-gray-900">{r.name}</td>
+                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">{r.name}</td>
                   <td className="px-4 py-3 text-gray-500">{r.city}</td>
                   <td className="px-4 py-3 text-gray-500">{r.cuisine_type}</td>
                   <td className="px-4 py-3 text-gray-500">{r.average_rating}</td>

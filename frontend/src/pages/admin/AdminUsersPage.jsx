@@ -104,7 +104,7 @@ export default function AdminUsersPage() {
             ) : (
               users.map((u) => (
                 <tr key={u.id} className="border-b border-gray-50 hover:bg-gray-50/50">
-                  <td className="px-4 py-3 font-medium text-gray-900">{u.first_name} {u.last_name}</td>
+                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">{u.first_name} {u.last_name}</td>
                   <td className="px-4 py-3 text-gray-500">{u.email}</td>
                   <td className="px-4 py-3 text-gray-500">{u.phone || '-'}</td>
                   <td className="px-4 py-3">
