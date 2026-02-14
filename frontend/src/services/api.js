@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BACKEND_URL = 'http://localhost:8000';
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 export function mediaUrl(path) {
   if (!path) return null;
@@ -37,7 +37,7 @@ API.interceptors.response.use(
       if (refreshToken) {
         try {
           const { data } = await axios.post(
-            'http://localhost:8000/api/auth/token/refresh/',
+            `${BACKEND_URL}/api/auth/token/refresh/`,
             { refresh: refreshToken }
           );
           localStorage.setItem('access_token', data.access);

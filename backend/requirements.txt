@@ -19,3 +19,6 @@ rpds-py==0.30.0
 sqlparse==0.5.5
 tzdata==2025.3
 uritemplate==4.2.0
+gunicorn==23.0.0
+whitenoise==6.8.2
+dj-database-url==2.3.0
