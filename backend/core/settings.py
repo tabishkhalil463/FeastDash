@@ -113,6 +113,9 @@ CORS_ALLOWED_ORIGINS = config(
     default='http://localhost:5173',
     cast=Csv()
 )
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://.*\.vercel\.app$',
+]
 
 # DRF
 REST_FRAMEWORK = {
