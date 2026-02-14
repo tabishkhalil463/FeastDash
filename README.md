@@ -4,14 +4,6 @@ A full-stack food ordering and delivery platform built for Pakistan, featuring m
 
 **Live Demo:** [https://feastdash.vercel.app](https://feastdash.vercel.app)
 
-### Demo Accounts
-
-| Role | Email | Password |
-|------|-------|----------|
-| Customer | ahmed@test.com | test1234 |
-| Restaurant Owner | bilal@test.com | test1234 |
-| Delivery Driver | kamran@test.com | test1234 |
-| Admin | admin@feastdash.pk | test1234 |
 
 ---
 
